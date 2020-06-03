@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\KanbaneManager.BL\KanbaneManager.BL.csproj" />
+      <ProjectReference Include="..\KanbaneManager.DL\KanbaneManager.DL.csproj" />
+    </ItemGroup>
+
+
+</Project>

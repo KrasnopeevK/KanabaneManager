@@ -1,0 +1,38 @@
+using KanbaneManager.DL.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace KanbaneManager.DL.Repository
+{
+    public class KanbaneContext : DbContext
+    {
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Car> Cars { get; set; }
+        public DbSet<TradePoint> TradePoint { get; set; }
+        public DbSet<Order> Orders { get; set; }
+
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            var connection =
+                @"Data Source=DESKTOP-AGJ0SL6\SQLEXPRESS;Database=KanabaneManager;Encrypt=False;Integrated Security=True;User ID=DESKTOP-AGJ0SL6\kiril";
+            optionsBuilder.UseSqlServer(connection);
+            base.OnConfiguring(optionsBuilder);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Role>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
+            modelBuilder.Entity<User>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
+            modelBuilder.Entity<Employee>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
+            modelBuilder.Entity<Department>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
+            modelBuilder.Entity<Car>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
+            modelBuilder.Entity<TradePoint>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
+            modelBuilder.Entity<Order>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
+
+            base.OnModelCreating(modelBuilder);
+        }
+    }
+}
