@@ -1,4 +1,4 @@
-using KanbaneManager.DL.Entities;
+using KanbaneManager.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace KanbaneManager.DL.Repository

@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace KanbaneManager.DL.Entities
+namespace KanbaneManager.Entity
 {
     public class Order : IIdentifier
     {

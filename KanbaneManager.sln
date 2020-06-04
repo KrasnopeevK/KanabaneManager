@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KanbaneManager.DL", "KanbaneManager.DL\KanbaneManager.DL.csproj", "{E160971F-910E-4EA1-9C82-2746994D7524}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KanbaneManager.BL", "KanbaneManager.BL\KanbaneManager.BL.csproj", "{E9E6FCED-539A-45B7-B58D-A922D19C15D7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KanbaneManager.WebAPI", "KanbaneManager.WebAPI\KanbaneManager.WebAPI.csproj", "{465CDE63-9588-491F-8201-DB0F6F354C58}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanbaneManager.BlazorApp", "KanbaneManager.BlazorApp\KanbaneManager.BlazorApp.csproj", "{08698A25-F9DB-452E-A0C3-8E67677857F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanbaneManager.Entity", "KanbaneManager.Entity\KanbaneManager.Entity.csproj", "{B64A4880-25F5-4F1B-B9BB-A652BAA69EB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,6 @@ Global
 		{E160971F-910E-4EA1-9C82-2746994D7524}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E160971F-910E-4EA1-9C82-2746994D7524}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E160971F-910E-4EA1-9C82-2746994D7524}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E9E6FCED-539A-45B7-B58D-A922D19C15D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E9E6FCED-539A-45B7-B58D-A922D19C15D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E9E6FCED-539A-45B7-B58D-A922D19C15D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E9E6FCED-539A-45B7-B58D-A922D19C15D7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{465CDE63-9588-491F-8201-DB0F6F354C58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{465CDE63-9588-491F-8201-DB0F6F354C58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{465CDE63-9588-491F-8201-DB0F6F354C58}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{08698A25-F9DB-452E-A0C3-8E67677857F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08698A25-F9DB-452E-A0C3-8E67677857F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08698A25-F9DB-452E-A0C3-8E67677857F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B64A4880-25F5-4F1B-B9BB-A652BAA69EB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B64A4880-25F5-4F1B-B9BB-A652BAA69EB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B64A4880-25F5-4F1B-B9BB-A652BAA69EB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B64A4880-25F5-4F1B-B9BB-A652BAA69EB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

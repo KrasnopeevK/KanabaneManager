@@ -1,14 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.1;netcoreapp3.1</TargetFrameworks>
+        <TargetFramework>netstandard2.1</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0-preview.1.20124.5" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0-preview.4.20220.10" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0-preview.4.20220.10" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0-preview.4.20220.10" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0-preview.4.20220.10" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\KanbaneManager.Entity\KanbaneManager.Entity.csproj" />
     </ItemGroup>
 
 </Project>

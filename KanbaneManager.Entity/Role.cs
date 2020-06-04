@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace KanbaneManager.DL.Entities
+namespace KanbaneManager.Entity
 {
     public class Role : IIdentifier
     {

@@ -5,18 +5,6 @@
     <e p="C:\Users\kiril\AppData\local\JetBrains\Rider2020.1\resharper-host\local\Transient\ReSharperHost\v201\SolutionCaches\_KanbaneManager.-406371760.00" t="ExcludeRecursive" />
     <e p="C:\Users\kiril\AppData\Roaming\JetBrains\Rider2020.1\scratches" t="IncludeRecursive" />
     <e p="D:\KanbaneManager" t="IncludeFlat">
-      <e p="KanbaneManager.BL" t="IncludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-        <e p="KanbaneManager.BL.csproj" t="IncludeRecursive" />
-        <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
-            <e p="netcoreapp3.1" t="Include">
-              <e p="KanbaneManager.BL.AssemblyInfo.cs" t="Include" />
-            </e>
-          </e>
-        </e>
-        <e p="ValueTransformer.cs" t="Include" />
-      </e>
       <e p="KanbaneManager.BlazorApp" t="IncludeRecursive">
         <e p="_Imports.razor" t="Include" />
         <e p="App.razor" t="Include" />
@@ -77,16 +65,6 @@
       </e>
       <e p="KanbaneManager.DL" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
-        <e p="Entities" t="Include">
-          <e p="Car.cs" t="Include" />
-          <e p="Department.cs" t="Include" />
-          <e p="Employee.cs" t="Include" />
-          <e p="Order.cs" t="Include" />
-          <e p="Role.cs" t="Include" />
-          <e p="TradePoint.cs" t="Include" />
-          <e p="User.cs" t="Include" />
-        </e>
-        <e p="IIdentifier.cs" t="Include" />
         <e p="KanbaneManager.DL.csproj" t="IncludeRecursive" />
         <e p="Migrations" t="Include">
           <e p="20200326184715_Init.cs" t="Include" />
@@ -95,9 +73,6 @@
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
-            <e p="netcoreapp3.1" t="Include">
-              <e p="KanbaneManager.DL.AssemblyInfo.cs" t="Include" />
-            </e>
             <e p="netstandard2.1" t="Include">
               <e p="KanbaneManager.DL.AssemblyInfo.cs" t="Include" />
             </e>
@@ -107,6 +82,25 @@
           <e p="IKanbaneRepository.cs" t="Include" />
           <e p="KanbaneContext.cs" t="Include" />
         </e>
+      </e>
+      <e p="KanbaneManager.Entity" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Car.cs" t="Include" />
+        <e p="Department.cs" t="Include" />
+        <e p="Employee.cs" t="Include" />
+        <e p="IIdentifier.cs" t="Include" />
+        <e p="KanbaneManager.Entity.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netstandard2.1" t="Include">
+              <e p="KanbaneManager.Entity.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Order.cs" t="Include" />
+        <e p="Role.cs" t="Include" />
+        <e p="TradePoint.cs" t="Include" />
+        <e p="User.cs" t="Include" />
       </e>
       <e p="KanbaneManager.sln" t="IncludeFlat" />
       <e p="KanbaneManager.WebAPI" t="IncludeRecursive">

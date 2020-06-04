@@ -1,4 +1,4 @@
-namespace KanbaneManager.DL.Entities
+namespace KanbaneManager.Entity
 {
     public interface IIdentifier
     {
