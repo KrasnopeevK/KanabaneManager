@@ -18,8 +18,7 @@
           </e>
         </e>
         <e p="Pages" t="Include">
-          <e p="Counter.razor" t="Include" />
-          <e p="FetchData.razor" t="Include" />
+          <e p="Cars.razor" t="Include" />
           <e p="Index.razor" t="Include" />
         </e>
         <e p="Program.cs" t="Include" />
@@ -58,9 +57,6 @@
           </e>
           <e p="favicon.ico" t="Include" />
           <e p="index.html" t="Include" />
-          <e p="sample-data" t="Include">
-            <e p="weather.json" t="Include" />
-          </e>
         </e>
       </e>
       <e p="KanbaneManager.DL" t="IncludeRecursive">

@@ -16,4 +16,10 @@
     <ProjectReference Include="..\KanbaneManager.DL\KanbaneManager.DL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Pages\Cars.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
 </Project>
