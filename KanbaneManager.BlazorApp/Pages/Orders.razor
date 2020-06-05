@@ -1,0 +1,23 @@
+@page "/orders"
+@inject HttpClient Http
+
+
+<RadzenDatePicker TValue="DateTime?" ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" 
+                  Change="@(args => Change(args, "DatePicker with time", "MM/dd/yyyy HH:mm"))" DateFormat="MM/dd/yyyy HH:mm" />
+        <h3 style="margin-top: 40px">DatePicker with 12 hour time format</h3>
+
+
+@code{
+    
+    Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
+    bool Change(DateTime? value, string name, string format)
+    {
+        events.Add(DateTime.Now, $"{name} value changed to {value?.ToString(format)}");
+        StateHasChanged();
+        return true;
+    }
+    
+    
+    
+
+}

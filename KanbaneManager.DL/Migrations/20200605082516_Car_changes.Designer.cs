@@ -4,14 +4,16 @@ using KanbaneManager.DL.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KanbaneManager.DL.Migrations
 {
     [DbContext(typeof(KanbaneContext))]
-    partial class KanbaneContextModelSnapshot : ModelSnapshot
+    [Migration("20200605082516_Car_changes")]
+    partial class Car_changes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

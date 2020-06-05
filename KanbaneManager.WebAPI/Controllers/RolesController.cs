@@ -6,9 +6,9 @@ namespace KanbaneManager.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class RoleController : BaseController<Role>
+    public class RolesController : BaseController<Role>
     {
-        public RoleController(KanbaneContext context) : base(context)
+        public RolesController(KanbaneContext context) : base(context)
         {
         }
     }

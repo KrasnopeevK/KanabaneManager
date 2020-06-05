@@ -25,7 +25,10 @@ namespace KanbaneManager.WebAPI
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("https://localhost:5001").AllowAnyMethod();
+                                      builder.WithOrigins("https://localhost:5001", "http://localhost:5000")
+                                          .AllowAnyMethod()
+                                          .AllowAnyHeader()
+                                          .AllowAnyOrigin();
                                   });
             });
             services.AddDbContext<KanbaneContext>();

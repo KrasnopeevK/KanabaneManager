@@ -11,7 +11,7 @@
 }
 else
 {
-    @if (_isEditing == true)
+    @if (_isEditing)
     {
         <table class="table">
             <thead>
@@ -19,30 +19,30 @@ else
                 <th>Гос. номер</th>
                 <th>Марка</th>
                 <th>Грузоподёмность</th>
-                <th>Средний расход на 100км</th>
+                <th>Дополнительная информация</th>
             </tr>
             </thead>
             <tbody>
             <tr>
                 <td>
-                    <input @_editingCar.RegNumber/>
+                    <input @bind=_editingCar.RegNumber/>
                 </td>
                 <td>
-                    <input @_editingCar.Label/>
+                    <input @bind=_editingCar.Label/>
                 </td>
                 <td>
-                    <input @_editingCar.WeightLift/>
+                    <input @bind=_editingCar.Carrying/>
                 </td>
                 <td>
-                    <input @_editingCar.NextToDate/>
+                    <input @bind=_editingCar.AdditionalInformation/>
                 </td>
             </tr>
             </tbody>
         </table>
         
         <div class="d-flex justify-content-center">
-            <button class="btn btn-primary btn-lg active" role="button" aria-pressed="true" @onclick="EditFinished">Сохранить</button>
-            <button class="btn btn-secondary btn-lg active" role="button" aria-pressed="true" @onclick="CancelEditing">Отмена</button>
+            <button class="btn btn-primary btn-sm" role="button" aria-pressed="true" @onclick="EditFinished" style="margin: 0 10px 0 0;">Сохранить</button>
+            <button class="btn btn-secondary btn-sm" role="button" aria-pressed="true" @onclick="CancelEditing" style="margin: 0 0 0 10px;">Отмена</button>
         </div>
     }
 
@@ -52,7 +52,10 @@ else
             <th>Гос. номер</th>
             <th>Марка</th>
             <th>Грузоподёмность</th>
-            <th>Средний расход на 100км</th>
+            <th>Дополнительная информация</th>
+            <th>
+                <button class="btn btn-danger" style="alignment: right;" @onclick="@(() => Edit())">Добавить</button>
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -61,13 +64,13 @@ else
             <tr>
                 <td>@car.RegNumber</td>
                 <td>@car.Label</td>
-                <td>@car.WeightLift</td>
-                <td>@car.NextToDate</td>
+                <td>@car.Carrying</td>
+                <td>@car.AdditionalInformation</td>
                 <td style="width: 100px">
-                    <button class="btn btn-primary" style="alignment: right;" @onclick="@(() => EditCar(car.Id))">Редактировать</button>
+                    <button class="btn btn-primary" style="alignment: right;" @onclick="@(() => Edit(car.Id))">Редактировать</button>
                 </td>
-                <td>
-                    <button class="btn btn-danger" style="alignment: right;" @onclick="@(async () => await DeleteCar(car.Id))">Удалить</button>
+                <td style="width: 100px">
+                    <button class="btn btn-danger" style="alignment: right;" @onclick="@(async () => await Delete(car.Id))">Удалить</button>
                 </td>
             </tr>
         }
@@ -76,26 +79,30 @@ else
 }
 
 @code {
-    private bool _isEditing = false;
+    private bool _isEditing;
     private Car _editingCar;
     private Car[] _cars;
-
+    private void Edit()
+    {
+        _editingCar = new Car();
+        _isEditing = true;
+    }
     protected override async Task OnInitializedAsync()
     {
-        _cars = await Http.GetFromJsonAsync<Car[]>("https://localhost:44327/car");
+        _cars = await Http.GetFromJsonAsync<Car[]>("https://localhost:44327/cars");
     }
 
 
-    private async Task DeleteCar(int carId)
+    private async Task Delete(int carId)
     {
-        var outcome = await Http.DeleteAsync($"https://localhost:44327/car/{carId}");
+        var outcome = await Http.DeleteAsync($"https://localhost:44327/cars/{carId}");
         if (outcome.StatusCode == HttpStatusCode.OK)
         {
-            _cars = await Http.GetFromJsonAsync<Car[]>("https://localhost:44327/car");
+            _cars = await Http.GetFromJsonAsync<Car[]>("https://localhost:44327/cars");
         }
     }
 
-    private void EditCar(int carId)
+    private void Edit(int carId)
     {
         _editingCar = _cars.FirstOrDefault(x => x.Id == carId);
         _isEditing = true;
@@ -103,10 +110,11 @@ else
 
     async Task<bool> EditFinished()
     {
-        var outcome = await Http.PutAsJsonAsync($"https://localhost:44327/car/{_editingCar.Id}", _editingCar);
+        var outcome = await Http.PutAsJsonAsync($"https://localhost:44327/cars/{_editingCar.Id}", _editingCar);
         if (outcome.StatusCode == HttpStatusCode.OK)
         {
-            _cars = await Http.GetFromJsonAsync<Car[]>("https://localhost:44327/car");
+            _cars = await Http.GetFromJsonAsync<Car[]>("https://localhost:44327/cars");
+            _isEditing = false;
             return true;
         }
         return false;

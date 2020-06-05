@@ -6,9 +6,9 @@ namespace KanbaneManager.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TradePointController : BaseController<TradePoint>
+    public class TradePointsController : BaseController<TradePoint>
     {
-        public TradePointController(KanbaneContext context) : base(context)
+        public TradePointsController(KanbaneContext context) : base(context)
         {
         }
     }

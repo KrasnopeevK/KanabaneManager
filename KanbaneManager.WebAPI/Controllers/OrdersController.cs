@@ -6,9 +6,9 @@ namespace KanbaneManager.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class OrderController : BaseController<Order>
+    public class OrdersController : BaseController<Order>
     {
-        public OrderController(KanbaneContext context) : base(context)
+        public OrdersController(KanbaneContext context) : base(context)
         {
         }
     }

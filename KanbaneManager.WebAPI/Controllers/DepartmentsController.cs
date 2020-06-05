@@ -6,9 +6,9 @@ namespace KanbaneManager.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserController : BaseController<User>
+    public class DepartmentsController : BaseController<Department>
     {
-        public UserController(KanbaneContext context) : base(context)
+        public DepartmentsController(KanbaneContext kanbaneContext) : base(kanbaneContext)
         {
         }
     }

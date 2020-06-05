@@ -6,8 +6,7 @@ namespace KanbaneManager.Entity
         public int Id { get; set; }
         public string Label { get; set; }
         public string RegNumber { get; set; }
-        public double WeightLift { get; set; }
-        public DateTime LastToDate { get; set; }
-        public DateTime NextToDate { get; set; }
+        public double Carrying { get; set; }
+        public string AdditionalInformation { get; set; }
     }
 }
