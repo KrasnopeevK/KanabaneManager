@@ -109,6 +109,7 @@
         <e p="appsettings.json" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="Controllers" t="Include">
+          <e p="AccountController.cs" t="Include" />
           <e p="BaseController.cs" t="Include" />
           <e p="CarsController.cs" t="Include" />
           <e p="DepartmentsController.cs" t="Include" />
@@ -117,6 +118,9 @@
           <e p="RolesController.cs" t="Include" />
           <e p="TradePointsController.cs" t="Include" />
           <e p="UsersController.cs" t="Include" />
+        </e>
+        <e p="JWT" t="Include">
+          <e p="AuthOptions.cs" t="Include" />
         </e>
         <e p="KanbaneManager.WebAPI.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive">

@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using KanbaneManager.Entity;
 using KanbaneManager.DL.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,7 @@ namespace KanbaneManager.WebAPI.Controllers
             _context = context;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<T>> AddEntity(T entity)
         {
@@ -27,6 +29,7 @@ namespace KanbaneManager.WebAPI.Controllers
             return new BadRequestResult();
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<T>> GetAllEntity()
         {
@@ -34,6 +37,7 @@ namespace KanbaneManager.WebAPI.Controllers
             return new OkObjectResult(entities);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<T>> GetEntity(int id)
         {
@@ -42,6 +46,7 @@ namespace KanbaneManager.WebAPI.Controllers
             return new OkObjectResult(entity);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<T>> UpdateEntity(int id, T entity)
         {
@@ -53,6 +58,7 @@ namespace KanbaneManager.WebAPI.Controllers
             return new BadRequestResult();
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<T>> DeleteEntity(int id)
         {
