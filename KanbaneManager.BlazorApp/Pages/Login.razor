@@ -1,0 +1,33 @@
+﻿@page "/login"
+@using KanbaneManager.Entity
+@using System.Net
+@using System.Net.Http.Headers
+@inject HttpClient Http
+
+<RadzenCard>
+    <RadzenLogin AllowRegister="false" AllowResetPassword="false" LoginText="Вход"
+                PasswordText="Пароль" UserText="Логин" Login="@(async (args) => await SignIn(args))" Style="margin-bottom: 20px;" />
+</RadzenCard>
+
+@code
+{
+
+    async Task SignIn(LoginArgs value)
+    {
+        var outcome = await Http.PostAsJsonAsync($"https://localhost:44327/Account", new { Login = value.Username, Pwd = value.Password });
+        if (outcome.StatusCode == HttpStatusCode.OK)
+        {
+            var token = await outcome.Content.ReadFromJsonAsync<Token>();
+            Program.JWT.token = token.access_token;
+            Program.JWT.user = token.username;
+        }
+        StateHasChanged();
+    }
+    
+    private class Token
+    {
+        public string access_token { get; set; }
+        public string username { get; set; }
+    }
+    
+}

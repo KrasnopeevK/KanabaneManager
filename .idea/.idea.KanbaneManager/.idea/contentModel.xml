@@ -21,6 +21,7 @@
         <e p="Pages" t="Include">
           <e p="Cars.razor" t="Include" />
           <e p="Index.razor" t="Include" />
+          <e p="Login.razor" t="Include" />
           <e p="Orders.razor" t="Include" />
           <e p="TradePoints.razor" t="Include" />
         </e>

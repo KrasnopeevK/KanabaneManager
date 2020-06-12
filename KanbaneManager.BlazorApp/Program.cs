@@ -19,5 +19,11 @@ namespace KanbaneManager.BlazorApp
             builder.Services.AddScoped<NotificationService>();
             await builder.Build().RunAsync();
         }
+
+        public static class JWT
+        {
+            public static string token;
+            public static string user;
+        }
     }
 }
