@@ -1,0 +1,17 @@
+@using KanbaneManager.BlazorApp.Services
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+<AuthorizeView>
+    <span>@context.User.FindFirst("FirstName").Value  @context.User.FindFirst("LastName").Value</span>   &nbsp;<RadzenButton Text="Выйти" Click="Logout" class="mr-2"/>
+</AuthorizeView>
+
+@code {
+
+    async Task Logout()
+    {
+        var localStateProvider = (LocalAuthenticationStateProvider)AuthenticationStateProvider;
+        await localStateProvider.LogoutAsync();
+        NavigationManager.NavigateTo("/auth/login"); 
+    }
+}

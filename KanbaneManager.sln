@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KanbaneManager.WebAPI", "Ka
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanbaneManager.BlazorApp", "KanbaneManager.BlazorApp\KanbaneManager.BlazorApp.csproj", "{08698A25-F9DB-452E-A0C3-8E67677857F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanbaneManager.Entity", "KanbaneManager.Entity\KanbaneManager.Entity.csproj", "{B64A4880-25F5-4F1B-B9BB-A652BAA69EB4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanbaneManager.Shared", "KanbaneManager.Shared\KanbaneManager.Shared.csproj", "{B64A4880-25F5-4F1B-B9BB-A652BAA69EB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

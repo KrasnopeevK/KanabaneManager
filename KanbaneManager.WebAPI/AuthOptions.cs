@@ -1,7 +1,7 @@
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace KanbaneManager.WebAPI.JWT
+namespace KanbaneManager.WebAPI
 {
     public class AuthOptions
     {
@@ -13,11 +13,5 @@ namespace KanbaneManager.WebAPI.JWT
         {
             return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));
         }
-    }
-
-    public class Token
-    {
-        public string Login { get; set; }
-        public string Pwd { get; set; }
     }
 }

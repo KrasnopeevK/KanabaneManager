@@ -29,7 +29,7 @@ namespace KanbaneManager.WebAPI.Controllers
             return new BadRequestResult();
         }
 
-        // [Authorize]
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<T>> GetAllEntity()
         {

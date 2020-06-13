@@ -1,5 +1,4 @@
 using KanbaneManager.DL.Repository;
-using KanbaneManager.WebAPI.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

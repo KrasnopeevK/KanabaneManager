@@ -3,30 +3,30 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using KanbaneManager.BlazorApp.Models;
 using KanbaneManager.DL.Repository;
 using KanbaneManager.Entity;
-using KanbaneManager.WebAPI.JWT;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace KanbaneManager.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AccountController : Controller
+    public class LoginController : Controller
     {
         private KanbaneContext _context;
 
-        public AccountController(KanbaneContext context)
+        public LoginController(KanbaneContext context)
         {
             _context = context;
         }
         
         [HttpPost]
-        public IActionResult Token(Token token)
+        public IActionResult Token(LoginRequest token)
         {
-            var identity = GetIdentity(token.Login, token.Pwd);
+            var identity = GetIdentity(token.Login, token.Password);
             if (identity == null)
             {
                 return BadRequest(new { errorText = "Invalid username or password." });
@@ -43,13 +43,21 @@ namespace KanbaneManager.WebAPI.Controllers
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
  
-            var response = new
-            {
-                access_token = encodedJwt,
-                username = identity.Name
+            var employee = _context.Set<Employee>().FirstOrDefault(x => x.Id == int.Parse(identity.Name));
+
+            var umr = new UserManagerResponse
+            {    
+                UserInfo = new Dictionary<string, string>
+                {
+                    {"FirstName", employee?.FirstName},
+                    {"LastName", employee?.LastName},
+                    {ClaimTypes.NameIdentifier, employee?.Id.ToString()}
+                },
+                Message = encodedJwt,
+                IsSuccess = true
             };
- 
-            return Json(response);
+            
+            return Json(umr);
         }
  
         private ClaimsIdentity GetIdentity(string username, string password)

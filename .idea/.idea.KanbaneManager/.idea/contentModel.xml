@@ -19,9 +19,12 @@
           </e>
         </e>
         <e p="Pages" t="Include">
+          <e p="Auth" t="Include">
+            <e p="Login.razor" t="Include" />
+            <e p="RedirectToLogin.razor" t="Include" />
+          </e>
           <e p="Cars.razor" t="Include" />
           <e p="Index.razor" t="Include" />
-          <e p="Login.razor" t="Include" />
           <e p="Orders.razor" t="Include" />
           <e p="TradePoints.razor" t="Include" />
         </e>
@@ -29,10 +32,18 @@
         <e p="Properties" t="Include">
           <e p="launchSettings.json" t="Include" />
         </e>
+        <e p="Services" t="Include">
+          <e p="AuthenticationService.cs" t="Include" />
+          <e p="CarService.cs" t="Include" />
+          <e p="LocalAuthenticationStateProvider.cs" t="Include" />
+        </e>
         <e p="Shared" t="Include">
+          <e p="AlertMessage.razor" t="Include" />
+          <e p="AuthLayout.razor" t="Include" />
           <e p="MainLayout.razor" t="Include" />
           <e p="NavMenu.razor" t="Include" />
           <e p="SurveyPrompt.razor" t="Include" />
+          <e p="UserStatus.razor" t="Include" />
         </e>
         <e p="wwwroot" t="Include">
           <e p="css" t="Include">
@@ -85,17 +96,23 @@
           <e p="KanbaneContext.cs" t="Include" />
         </e>
       </e>
-      <e p="KanbaneManager.Entity" t="IncludeRecursive">
+      <e p="KanbaneManager.Shared" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
         <e p="Car.cs" t="Include" />
         <e p="Department.cs" t="Include" />
         <e p="Employee.cs" t="Include" />
         <e p="IIdentifier.cs" t="Include" />
-        <e p="KanbaneManager.Entity.csproj" t="IncludeRecursive" />
+        <e p="KanbaneManager.Shared.csproj" t="IncludeRecursive" />
+        <e p="Models" t="Include">
+          <e p="AlertMessageType.cs" t="Include" />
+          <e p="LocalUserInfo.cs" t="Include" />
+          <e p="LoginRequest.cs" t="Include" />
+          <e p="UserManagerResponse.cs" t="Include" />
+        </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netstandard2.1" t="Include">
-              <e p="KanbaneManager.Entity.AssemblyInfo.cs" t="Include" />
+              <e p="KanbaneManager.Shared.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
         </e>
@@ -108,20 +125,18 @@
       <e p="KanbaneManager.WebAPI" t="IncludeRecursive">
         <e p="appsettings.Development.json" t="Include" />
         <e p="appsettings.json" t="Include" />
+        <e p="AuthOptions.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="Controllers" t="Include">
-          <e p="AccountController.cs" t="Include" />
           <e p="BaseController.cs" t="Include" />
           <e p="CarsController.cs" t="Include" />
           <e p="DepartmentsController.cs" t="Include" />
           <e p="EmployeesController.cs" t="Include" />
+          <e p="LoginController.cs" t="Include" />
           <e p="OrdersController.cs" t="Include" />
           <e p="RolesController.cs" t="Include" />
           <e p="TradePointsController.cs" t="Include" />
           <e p="UsersController.cs" t="Include" />
-        </e>
-        <e p="JWT" t="Include">
-          <e p="AuthOptions.cs" t="Include" />
         </e>
         <e p="KanbaneManager.WebAPI.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
