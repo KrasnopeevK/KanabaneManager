@@ -1,0 +1,71 @@
+@page "/addCar"
+@using KanbaneManager.Shared.Entities
+@using KanbaneManager.BlazorApp.Services
+@inject DialogService DialogService
+
+<div class="grid">
+    <div class="row">
+        <div class="col-md-4 align-items-center d-flex">
+            <RadzenLabel Text="Марка"/>
+        </div>
+        <div class="col-md-8">
+            <RadzenTextBox Style="margin-bottom: 20px; width: 100%" @bind-Value="@Item.Label"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 align-items-center d-flex">
+            <RadzenLabel Text="Номер"/>
+        </div>
+        <div class="col-md-8">
+            <RadzenTextBox Style="margin-bottom: 20px; width: 100%" @bind-Value="@Item.RegNumber"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 align-items-center d-flex">
+            <RadzenLabel Text="Грузоподъёмность"/>
+        </div>
+        <div class="col-md-8">
+            <RadzenNumeric TValue="double" Placeholder="0.0" Step="0.5" Style="margin-bottom: 20px" @bind-Value="@Item.Carrying"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 align-items-center d-flex">
+            <RadzenLabel Text="Доп. информация"/>
+        </div>
+        <div class="col-md-8">
+            <RadzenTextBox Style="margin-bottom: 20px; width: 100%" @bind-Value="@Item.AdditionalInformation"/>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" Click="@Submit"/>
+            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="display: inline-block; margin-left: 10px;" Text="Cancel" Click="@Cancel"/>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    protected override void OnInitialized()
+    {
+        Item = new Car();
+    }
+
+    public Car Item { get; set; }
+
+    [Parameter]
+    public CrudService<Car> crudService { get; set; }
+
+    async void Submit()
+    {
+        if (await crudService.Add(Item))
+        {
+            DialogService.Close(Item);
+        }
+    }
+
+    void Cancel()
+    {
+        DialogService.Close(false);
+    }
+}

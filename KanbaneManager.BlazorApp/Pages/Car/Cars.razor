@@ -1,0 +1,93 @@
+@page "/cars"
+@using KanbaneManager.Shared.Entities
+@using KanbaneManager.BlazorApp.Services
+@inject DialogService DialogService
+@attribute [Authorize]
+
+@if (_cars == null)
+{
+    <div class="align-middle">
+        <div class="d-flex justify-content-center">
+            Загрузка...
+        </div>
+    </div>
+}
+else
+{
+    <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="add_circle_outline" Size="ButtonSize.Medium" Text="Добавить" Style="margin: 3px;" Click="@AddButtonClick"/>
+    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true"
+                AllowSorting="true" Data="@_cars" TItem="Car" ColumnWidth="100%">
+        <Columns>
+            <RadzenGridColumn TItem="Car" Property="Label" Title="Марка машины"/>
+            <RadzenGridColumn TItem="Car" Property="RegNumber" Title="Регистрационный номер"/>
+            <RadzenGridColumn TItem="Car" Property="Carrying" Title="Грузоподъёмность"/>
+            <RadzenGridColumn TItem="Car" Property="AdditionalInformation" Title="Доп. информация"/>
+            <RadzenGridColumn TItem="Car" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                <Template Context="SelectedItem">
+                    <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="create" Size="ButtonSize.Small" Click="@((args) => EditButtonClick(args, SelectedItem))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Car" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                <Template Context="SelectedItem">
+                    <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="delete" Size="ButtonSize.Small" Click="@((args) => RemoveButtonClick(args, SelectedItem))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+}
+
+
+
+
+
+@code {
+
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+
+    private IEnumerable<Car> _cars;
+
+    CrudService<Car> crudService;
+
+    protected override async Task OnInitializedAsync()
+    {
+        crudService = new CrudService<Car>("cars", AuthenticationState.Result.User.FindFirst("AccessToken").Value);
+        _cars = await crudService.GetAll();
+    }
+
+    async void RemoveButtonClick(MouseEventArgs arg, Car item)
+    {
+        if (await crudService.Remove(item.Id.ToString()))
+        {
+            _cars = await crudService.GetAll();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    async void EditButtonClick(MouseEventArgs arg, Car item)
+    {
+        var result = await DialogService.OpenAsync<EditCar>("Редактировать автомобиль", new Dictionary<string, object>
+        {
+            {"Item", item},
+            {"crudService", crudService}
+        });
+        await InvokeAsync(StateHasChanged);
+    }
+
+    async void AddButtonClick()
+    {
+        var result = await DialogService.OpenAsync<AddCar>("Добавить автомобиль", new Dictionary<string, object>
+        {
+            {"crudService", crudService}
+        });
+
+        if (result is Car)
+        {
+            _cars = await crudService.GetAll();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+}

@@ -13,11 +13,11 @@ namespace KanbaneManager.BlazorApp
 {
     public class Program
     {
+        public const string URL = "https://localhost:44327";
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-            var URL = "https://localhost:44327";
             builder.Services.AddScoped<AuthenticationService>(s =>
             {
                 return new AuthenticationService(URL);
@@ -29,7 +29,6 @@ namespace KanbaneManager.BlazorApp
             {
                 options.UseWasmSharedBuffer = true;
             }); 
-            builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(URL) });
             builder.Services.AddScoped<AuthenticationStateProvider, LocalAuthenticationStateProvider>();
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<NotificationService>();
