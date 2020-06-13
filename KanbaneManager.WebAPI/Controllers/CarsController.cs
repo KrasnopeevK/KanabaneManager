@@ -1,4 +1,4 @@
-using KanbaneManager.Entity;
+using KanbaneManager.Shared.Entities;
 using KanbaneManager.DL.Repository;
 using Microsoft.AspNetCore.Mvc;
 

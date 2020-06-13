@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace KanbaneManager.BlazorApp.Models
+namespace KanbaneManager.Shared.Entities.AuthModels
 {
     public class LoginRequest
     {

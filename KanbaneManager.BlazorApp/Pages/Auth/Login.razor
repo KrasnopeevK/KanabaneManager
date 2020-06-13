@@ -1,7 +1,7 @@
 ﻿@page "/auth/login"
 
 @layout AuthLayout
-@using KanbaneManager.BlazorApp.Models
+@using KanbaneManager.Shared.Entities.AuthModels
 @using Microsoft.AspNetCore.Components.Authorization
 @using Blazored.LocalStorage
 @using KanbaneManager.BlazorApp.Services
@@ -42,7 +42,7 @@
 
     bool isBusy = false;
     string message = string.Empty;
-    Models.AlertMessageType messageType = Models.AlertMessageType.Success;
+    KanbaneManager.Shared.Entities.AuthModels.AlertMessageType messageType = KanbaneManager.Shared.Entities.AuthModels.AlertMessageType.Success;
 
     public async Task LoginUser()
     {
@@ -66,7 +66,7 @@
         else
         {
             message = result.Message;
-            messageType = Models.AlertMessageType.Error;
+            messageType = KanbaneManager.Shared.Entities.AuthModels.AlertMessageType.Error;
         }
         isBusy = false;
     }

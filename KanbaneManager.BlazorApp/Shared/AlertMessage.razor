@@ -7,10 +7,10 @@
     [Parameter]
     public string Message { get; set; }
 
-    private Models.AlertMessageType messageType;
+    private KanbaneManager.Shared.Entities.AuthModels.AlertMessageType messageType;
 
     [Parameter]
-    public Models.AlertMessageType MessageType
+    public KanbaneManager.Shared.Entities.AuthModels.AlertMessageType MessageType
     {
         get => messageType;
         set
@@ -18,13 +18,13 @@
             messageType = value;
             switch (messageType)
             {
-                case Models.AlertMessageType.Error:
+                case KanbaneManager.Shared.Entities.AuthModels.AlertMessageType.Error:
                     alertClass = "alert-danger";
                     break;
-                case Models.AlertMessageType.Warning:
+                case KanbaneManager.Shared.Entities.AuthModels.AlertMessageType.Warning:
                     alertClass = "alert-warning";
                     break;
-                case Models.AlertMessageType.Success:
+                case KanbaneManager.Shared.Entities.AuthModels.AlertMessageType.Success:
                     alertClass = "alert-success";
                     break;
                 default:

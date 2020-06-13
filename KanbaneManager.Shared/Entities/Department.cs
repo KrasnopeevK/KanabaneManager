@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace KanbaneManager.Entity
+namespace KanbaneManager.Shared.Entities
 {
     public class Department : IIdentifier
     {

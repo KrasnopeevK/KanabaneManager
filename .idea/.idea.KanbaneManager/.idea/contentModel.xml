@@ -97,18 +97,24 @@
         </e>
       </e>
       <e p="KanbaneManager.Shared" t="IncludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-        <e p="Car.cs" t="Include" />
-        <e p="Department.cs" t="Include" />
-        <e p="Employee.cs" t="Include" />
-        <e p="IIdentifier.cs" t="Include" />
-        <e p="KanbaneManager.Shared.csproj" t="IncludeRecursive" />
-        <e p="Models" t="Include">
+        <e p="AuthModels" t="Include">
           <e p="AlertMessageType.cs" t="Include" />
           <e p="LocalUserInfo.cs" t="Include" />
           <e p="LoginRequest.cs" t="Include" />
           <e p="UserManagerResponse.cs" t="Include" />
         </e>
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Entities" t="Include">
+          <e p="Car.cs" t="Include" />
+          <e p="Department.cs" t="Include" />
+          <e p="Employee.cs" t="Include" />
+          <e p="IIdentifier.cs" t="Include" />
+          <e p="Order.cs" t="Include" />
+          <e p="Role.cs" t="Include" />
+          <e p="TradePoint.cs" t="Include" />
+          <e p="User.cs" t="Include" />
+        </e>
+        <e p="KanbaneManager.Shared.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netstandard2.1" t="Include">
@@ -116,10 +122,6 @@
             </e>
           </e>
         </e>
-        <e p="Order.cs" t="Include" />
-        <e p="Role.cs" t="Include" />
-        <e p="TradePoint.cs" t="Include" />
-        <e p="User.cs" t="Include" />
       </e>
       <e p="KanbaneManager.sln" t="IncludeFlat" />
       <e p="KanbaneManager.WebAPI" t="IncludeRecursive">

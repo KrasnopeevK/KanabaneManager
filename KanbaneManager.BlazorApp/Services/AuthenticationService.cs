@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using AKSoftware.WebApi.Client;
-using KanbaneManager.BlazorApp.Models;
+using KanbaneManager.Shared.Entities.AuthModels;
 
 namespace KanbaneManager.BlazorApp.Services
 {

@@ -1,4 +1,4 @@
-namespace KanbaneManager.Entity
+namespace KanbaneManager.Shared.Entities
 {
     public class TradePoint : IIdentifier
     {

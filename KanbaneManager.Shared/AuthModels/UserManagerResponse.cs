@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace KanbaneManager.BlazorApp.Models
+namespace KanbaneManager.Shared.Entities.AuthModels
 {
     public class UserManagerResponse
     {

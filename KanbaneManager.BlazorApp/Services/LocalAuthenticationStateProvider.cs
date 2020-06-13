@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
-using KanbaneManager.BlazorApp.Models;
+using KanbaneManager.Shared.Entities.AuthModels;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace KanbaneManager.BlazorApp.Services

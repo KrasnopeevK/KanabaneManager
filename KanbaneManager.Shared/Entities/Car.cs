@@ -1,5 +1,5 @@
 using System;
-namespace KanbaneManager.Entity
+namespace KanbaneManager.Shared.Entities
 {
     public class Car : IIdentifier
     {

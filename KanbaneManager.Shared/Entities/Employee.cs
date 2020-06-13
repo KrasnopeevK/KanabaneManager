@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace KanbaneManager.Entity
+namespace KanbaneManager.Shared.Entities
 {
     public class Employee : IIdentifier
     {

@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using KanbaneManager.Entity;
+using KanbaneManager.Shared.Entities;
 using KanbaneManager.DL.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

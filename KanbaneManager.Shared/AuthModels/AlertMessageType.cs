@@ -1,4 +1,4 @@
-namespace KanbaneManager.BlazorApp.Models
+namespace KanbaneManager.Shared.Entities.AuthModels
 {
     public enum AlertMessageType
     {
