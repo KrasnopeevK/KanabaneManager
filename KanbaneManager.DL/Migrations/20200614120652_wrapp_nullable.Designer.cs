@@ -4,14 +4,16 @@ using KanbaneManager.DL.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KanbaneManager.DL.Migrations
 {
     [DbContext(typeof(KanbaneContext))]
-    partial class KanbaneContextModelSnapshot : ModelSnapshot
+    [Migration("20200614120652_wrapp_nullable")]
+    partial class wrapp_nullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -199,17 +201,17 @@ namespace KanbaneManager.DL.Migrations
             modelBuilder.Entity("KanbaneManager.Shared.Entities.Order", b =>
                 {
                     b.HasOne("KanbaneManager.Shared.Entities.Car", "Car")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("CarId");
 
                     b.HasOne("KanbaneManager.Shared.Entities.Employee", "Executor")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("ExecutorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("KanbaneManager.Shared.Entities.TradePoint", "TradePoint")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("TradePointId");
                 });
 

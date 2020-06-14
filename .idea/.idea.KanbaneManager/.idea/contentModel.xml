@@ -28,7 +28,19 @@
             <e p="Cars.razor" t="Include" />
             <e p="EditCar.razor" t="Include" />
           </e>
+          <e p="Departments" t="Include" />
+          <e p="Employees" t="Include" />
           <e p="Index.razor" t="Include" />
+          <e p="Orders" t="Include">
+            <e p="AddOrder.razor" t="Include" />
+            <e p="EditOrder.razor" t="Include" />
+            <e p="Orders.razor" t="Include" />
+          </e>
+          <e p="TradePoints" t="Include">
+            <e p="AddTradePoint.razor" t="Include" />
+            <e p="EditTradePoint.razor" t="Include" />
+            <e p="Points.razor" t="Include" />
+          </e>
         </e>
         <e p="Program.cs" t="Include" />
         <e p="Properties" t="Include">
@@ -84,6 +96,12 @@
           <e p="20200326184715_Init.Designer.cs" t="Include" />
           <e p="20200605082516_Car_changes.cs" t="Include" />
           <e p="20200605082516_Car_changes.Designer.cs" t="Include" />
+          <e p="20200614094030_order_changed.cs" t="Include" />
+          <e p="20200614094030_order_changed.Designer.cs" t="Include" />
+          <e p="20200614120652_wrapp_nullable.cs" t="Include" />
+          <e p="20200614120652_wrapp_nullable.Designer.cs" t="Include" />
+          <e p="20200614165358_orde_fluentapi.cs" t="Include" />
+          <e p="20200614165358_orde_fluentapi.Designer.cs" t="Include" />
           <e p="KanbaneContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">

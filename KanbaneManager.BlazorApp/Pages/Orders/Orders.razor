@@ -1,0 +1,145 @@
+@page "/orders"
+@using KanbaneManager.Shared.Entities
+@using KanbaneManager.BlazorApp.Services
+@inject DialogService DialogService
+@attribute [Authorize]
+
+@if (_orders == null)
+{
+    <div class="align-middle">
+        <div class="d-flex justify-content-center">
+            Загрузка...
+        </div>
+    </div>
+}
+else
+{
+    <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="add_circle_outline" Size="ButtonSize.Medium" Text="Добавить" Style="margin: 3px;" Click="@AddButtonClick"/>
+    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true"
+                AllowSorting="true" Data="@_orders" TItem="Order" ColumnWidth="100%">
+        <Columns>
+            <RadzenGridColumn TItem="Order" Property="Name" Title="Название"/>
+            <RadzenGridColumn TItem="Order" Property="CreationDate" Title="Дата создания"/>
+            <RadzenGridColumn TItem="Order" Property="Executor" Context="data" Type="Employee" Title="Исполнитель">
+                <Template>
+                    @data.Executor.FirstName @data.Executor.LastName
+                </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Order" Property="TradePoint" Context="data" Type="TradePoint" Title="Торговая тачка">
+                <Template>
+                    @data.TradePoint.City @data.TradePoint.Name
+                </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Order" Property="Car" Context="data" Type="Car" Title="Машина">
+                <Template>
+                    @data.Car.Label @data.Car.RegNumber
+                </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Order" Property="OrderDescription" Title="Описание"/>
+            <RadzenGridColumn TItem="Order" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                <Template Context="SelectedItem">
+                    <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="create" Size="ButtonSize.Small" Click="@((args) => EditButtonClick(args, SelectedItem))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Order" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                <Template Context="SelectedItem">
+                    <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="delete" Size="ButtonSize.Small" Click="@((args) => RemoveButtonClick(args, SelectedItem))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+}
+
+
+
+
+
+@code {
+
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+
+    private IEnumerable<Order> _orders;
+    private IEnumerable<Car> _cars;
+    private IEnumerable<TradePoint> _points;
+    private IEnumerable<Employee> _employees;
+
+    CrudService<Order> crudService;
+    CrudService<Employee> crudServiceEmployee;
+    CrudService<Car> crudServiceCar;
+    CrudService<TradePoint> crudServicePoints;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var token = AuthenticationState.Result.User.FindFirst("AccessToken").Value;
+        crudService = new CrudService<Order>("orders", token);
+        _orders = await crudService.GetAll();
+        crudServiceEmployee = new CrudService<Employee>("employees", token);
+        crudServiceCar = new CrudService<Car>("cars", token);
+        crudServicePoints = new CrudService<TradePoint>("tradepoints", token);
+        _cars = await crudServiceCar.GetAll();
+        _points = await crudServicePoints.GetAll();
+        _employees = await crudServiceEmployee.GetAll();
+        foreach (var order in _orders)
+        {
+            order.Car = _cars.FirstOrDefault(x => x.Id == order.CarId);
+            order.TradePoint = _points.FirstOrDefault(x => x.Id == order.TradePointId);
+            order.Executor = _employees.FirstOrDefault(x => x.Id == order.ExecutorId);
+        }
+    }
+
+    async void RemoveButtonClick(MouseEventArgs arg, Order item)
+    {
+        if (await crudService.Remove(item.Id.ToString()))
+        {
+            _orders = await crudService.GetAll();
+            SetEntities();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    async void EditButtonClick(MouseEventArgs arg, Order item)
+    {
+        var result = await DialogService.OpenAsync<EditOrder>("Редактировать задание", new Dictionary<string, object>
+        {
+            {"Item", item},
+            {"crudService", crudService},
+            {"crudServiceEmployee", crudServiceEmployee},
+            {"crudServiceCar", crudServiceCar},
+            {"crudServicePoints", crudServicePoints}
+        });
+        SetEntities();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    async void AddButtonClick()
+    {
+        var result = await DialogService.OpenAsync<AddOrder>("Добавить задание", new Dictionary<string, object>
+        {
+            {"crudService", crudService},
+            {"crudServiceEmployee", crudServiceEmployee},
+            {"crudServiceCar", crudServiceCar},
+            {"crudServicePoints", crudServicePoints}
+        });
+
+        if (result is Order)
+        {
+            _orders = await crudService.GetAll();
+            SetEntities();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    void SetEntities()
+    {
+        foreach (var order in _orders)
+        {
+            order.Car = _cars.FirstOrDefault(x => x.Id == order.CarId);
+            order.TradePoint = _points.FirstOrDefault(x => x.Id == order.TradePointId);
+            order.Executor = _employees.FirstOrDefault(x => x.Id == order.ExecutorId);
+        }
+    }
+
+}

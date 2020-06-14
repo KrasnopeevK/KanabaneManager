@@ -4,14 +4,16 @@ using KanbaneManager.DL.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KanbaneManager.DL.Migrations
 {
     [DbContext(typeof(KanbaneContext))]
-    partial class KanbaneContextModelSnapshot : ModelSnapshot
+    [Migration("20200614165358_orde_fluentapi")]
+    partial class orde_fluentapi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

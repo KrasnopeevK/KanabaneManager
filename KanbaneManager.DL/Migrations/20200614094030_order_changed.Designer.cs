@@ -4,14 +4,16 @@ using KanbaneManager.DL.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KanbaneManager.DL.Migrations
 {
     [DbContext(typeof(KanbaneContext))]
-    partial class KanbaneContextModelSnapshot : ModelSnapshot
+    [Migration("20200614094030_order_changed")]
+    partial class order_changed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,7 +93,7 @@ namespace KanbaneManager.DL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CarId")
+                    b.Property<int>("CarId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreationDate")
@@ -106,7 +108,7 @@ namespace KanbaneManager.DL.Migrations
                     b.Property<string>("OrderDescription")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TradePointId")
+                    b.Property<int>("TradePointId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -199,18 +201,22 @@ namespace KanbaneManager.DL.Migrations
             modelBuilder.Entity("KanbaneManager.Shared.Entities.Order", b =>
                 {
                     b.HasOne("KanbaneManager.Shared.Entities.Car", "Car")
-                        .WithMany("Orders")
-                        .HasForeignKey("CarId");
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("KanbaneManager.Shared.Entities.Employee", "Executor")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("ExecutorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("KanbaneManager.Shared.Entities.TradePoint", "TradePoint")
-                        .WithMany("Orders")
-                        .HasForeignKey("TradePointId");
+                        .WithMany()
+                        .HasForeignKey("TradePointId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("KanbaneManager.Shared.Entities.User", b =>

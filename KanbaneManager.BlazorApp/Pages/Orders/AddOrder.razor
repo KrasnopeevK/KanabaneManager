@@ -1,0 +1,154 @@
+@page "/addOrder"
+@using KanbaneManager.Shared.Entities
+@using KanbaneManager.BlazorApp.Services
+@using System.Text.RegularExpressions
+@inject DialogService DialogService
+
+@if (_cars == null || _employees == null || _points == null)
+{
+    <div>
+        Загрузка...
+    </div>
+}
+else
+{
+    <div class="grid">
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="Название"/>
+            </div>
+            <div class="col-md-8">
+                <RadzenTextBox Style="margin-bottom: 20px; width: 100%" @bind-Value="@Item.Name"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="Исполнитель"/>
+            </div>
+            <div class="col-md-8">
+                <RadzenDropDown AllowClear="true" TValue="int"
+                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true"
+                                Data="@_employees" TextProperty="LastName" ValueProperty="Id" Style="margin-bottom: 20px" Change="@(args => ChangeEmployee(args))"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="Авто"/>
+            </div>
+            <div class="col-md-8">
+                <RadzenDropDown AllowClear="true" TValue="Nullable<int>"
+                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true"
+                                Data="@_cars" TextProperty="RegNumber" ValueProperty="Id" Style="margin-bottom: 20px" Change="@(args => ChangeCar(args))"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="Торговая точка"/>
+            </div>
+            <div class="col-md-8">
+                <RadzenDropDown AllowClear="true" TValue="Nullable<int>"
+                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true"
+                                Data="@_points" TextProperty="Name" ValueProperty="Id" Style="margin-bottom: 20px" Change="@(args => ChangePoint(args))"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="Описание"/>
+            </div>
+            <div class="col-md-8">
+                <RadzenTextBox Style="margin-bottom: 20px; width: 100%" @bind-Value="@Item.OrderDescription"/>
+            </div>
+        </div>
+
+
+        <div class="row justify-content-center">
+            <div class="col-md-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" Click="@Submit"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="display: inline-block; margin-left: 10px;" Text="Cancel" Click="@Cancel"/>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@code
+{
+    [Parameter]
+    public CrudService<Employee> crudServiceEmployee { get; set; }
+
+    [Parameter]
+    public CrudService<Car> crudServiceCar { get; set; }
+
+    [Parameter]
+    public CrudService<TradePoint> crudServicePoints { get; set; }
+
+    [Parameter]
+    public CrudService<Order> crudService { get; set; }
+
+
+    public IEnumerable<Employee> _employees { get; set; }
+    public IEnumerable<Car> _cars { get; set; }
+    public IEnumerable<TradePoint> _points { get; set; }
+
+    public Order Item { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Item = new Order();
+        Item.CreationDate = DateTime.Now;
+        _cars = await crudServiceCar.GetAll();
+        _points = await crudServicePoints.GetAll();
+        _employees = await crudServiceEmployee.GetAll();
+    }
+
+    async void Submit()
+    {
+        if (await crudService.Add(Item))
+        {
+            DialogService.Close(Item);
+        }
+    }
+
+    void Cancel()
+    {
+        DialogService.Close(false);
+    }
+
+    void ChangeEmployee(object value)
+    {
+        if (int.TryParse(value.ToString(), out var id))
+        {
+            Item.ExecutorId = id;
+        }
+        else
+        {
+            Item.ExecutorId = _employees.FirstOrDefault().Id;
+        }
+    }
+
+    void ChangeCar(object value)
+    {
+        if (int.TryParse(value.ToString(), out var id))
+        {
+            Item.CarId = id;
+        }
+        else
+        {
+            Item.CarId = _cars.FirstOrDefault().Id;
+        }
+    }
+
+    void ChangePoint(object value)
+    {
+        if (int.TryParse(value.ToString(), out var id))
+        {
+            Item.TradePointId = id;
+        }
+        else
+        {
+            Item.TradePointId = _points.FirstOrDefault().Id;
+        }
+    }
+
+}

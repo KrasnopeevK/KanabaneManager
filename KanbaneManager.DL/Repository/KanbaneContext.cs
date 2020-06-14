@@ -30,7 +30,14 @@ namespace KanbaneManager.DL.Repository
             modelBuilder.Entity<Department>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
             modelBuilder.Entity<Car>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
             modelBuilder.Entity<TradePoint>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
-            modelBuilder.Entity<Order>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
+            modelBuilder.Entity<Order>(b =>
+            {
+                b.Property(x => x.Id).ValueGeneratedOnAdd();
+                b.HasOne(x => x.Car).WithMany(x => x.Orders).HasForeignKey(x => x.CarId);
+                b.HasOne(x => x.Executor).WithMany(x => x.Orders).HasForeignKey(x => x.ExecutorId);
+                b.HasOne(x => x.TradePoint).WithMany(x => x.Orders).HasForeignKey(x => x.TradePointId);
+                
+            });
 
             base.OnModelCreating(modelBuilder);
         }

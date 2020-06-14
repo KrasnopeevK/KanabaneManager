@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace KanbaneManager.Shared.Entities
 {
     public class TradePoint : IIdentifier
@@ -7,5 +9,6 @@ namespace KanbaneManager.Shared.Entities
         public string City { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
+        public List<Order> Orders { get; set; }
     }
 }

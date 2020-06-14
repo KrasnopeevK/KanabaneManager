@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KanbaneManager.Shared.Entities
@@ -11,5 +12,7 @@ namespace KanbaneManager.Shared.Entities
         public int DepartmentId { get; set; }
         [ForeignKey("DepartmentId")]
         public Department Department { get; set; }
+
+        public List<Order> Orders { get; set; }
     }
 }

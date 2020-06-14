@@ -46,11 +46,34 @@
     <Content Update="Pages\Car\AddCar.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
+    <Content Update="Pages\TradePoints\Points.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\TradePoints\AddTradePoint.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\TradePoints\EditTradePoint.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Orders\Orders.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Orders\AddOrder.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Orders\EditOrder.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\Auth\Login.razor" />
     <_ContentIncludedByDefault Remove="Pages\Auth\RedirectToLogin.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Departments" />
+    <Folder Include="Pages\Employees" />
   </ItemGroup>
 
 </Project>

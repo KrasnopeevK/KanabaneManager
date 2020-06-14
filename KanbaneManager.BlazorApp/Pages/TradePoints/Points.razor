@@ -1,0 +1,94 @@
+@page "/points"
+@using KanbaneManager.Shared.Entities
+@using KanbaneManager.BlazorApp.Services
+@inject DialogService DialogService
+@attribute [Authorize]
+
+@if (_points == null)
+{
+    <div class="align-middle">
+        <div class="d-flex justify-content-center">
+            Загрузка...
+        </div>
+    </div>
+}
+else
+{
+    <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="add_circle_outline" Size="ButtonSize.Medium" Text="Добавить" Style="margin: 3px;" Click="@AddButtonClick"/>
+    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true"
+                AllowSorting="true" Data="@_points" TItem="TradePoint" ColumnWidth="100%">
+        <Columns>
+            <RadzenGridColumn TItem="TradePoint" Property="Name" Title="Название"/>
+            <RadzenGridColumn TItem="TradePoint" Property="City" Title="Город"/>
+            <RadzenGridColumn TItem="TradePoint" Property="Address" Title="Адрес"/>
+            <RadzenGridColumn TItem="TradePoint" Property="PhoneNumber" Title="Телефон"/>
+            <RadzenGridColumn TItem="TradePoint" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                <Template Context="SelectedItem">
+                    <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="create" Size="ButtonSize.Small" Click="@((args) => EditButtonClick(args, SelectedItem))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="TradePoint" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                <Template Context="SelectedItem">
+                    <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="delete" Size="ButtonSize.Small" Click="@((args) => RemoveButtonClick(args, SelectedItem))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+}
+
+
+
+
+
+@code {
+
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+
+    private IEnumerable<TradePoint> _points;
+
+    CrudService<TradePoint> crudService;
+
+    protected override async Task OnInitializedAsync()
+    {
+        crudService = new CrudService<TradePoint>("tradepoints", 
+            AuthenticationState.Result.User.FindFirst("AccessToken").Value);
+        _points = await crudService.GetAll();
+    }
+
+    async void RemoveButtonClick(MouseEventArgs arg, TradePoint item)
+    {
+        if (await crudService.Remove(item.Id.ToString()))
+        {
+            _points = await crudService.GetAll();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    async void EditButtonClick(MouseEventArgs arg, TradePoint item)
+    {
+        var result = await DialogService.OpenAsync<EditTradePoint>("Редактировать точку", new Dictionary<string, object>
+        {
+            {"Item", item},
+            {"crudService", crudService}
+        });
+        await InvokeAsync(StateHasChanged);
+    }
+
+    async void AddButtonClick()
+    {
+        var result = await DialogService.OpenAsync<AddTradePoint>("Добавить точку", new Dictionary<string, object>
+        {
+            {"crudService", crudService}
+        });
+        
+        if (result is TradePoint)
+        {
+            _points = await crudService.GetAll();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+}
