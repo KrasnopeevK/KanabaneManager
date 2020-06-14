@@ -27,6 +27,7 @@ namespace KanbaneManager.BlazorApp.Services
                     new Claim("LastName", userInfo.LastName),
                     new Claim("AccessToken", userInfo.AccessToken),
                     new Claim(ClaimTypes.NameIdentifier, userInfo.Id),
+                    new Claim(ClaimTypes.Role, userInfo.Role),
                 };
 
                 var identity = new ClaimsIdentity(claims, "BearerToken");

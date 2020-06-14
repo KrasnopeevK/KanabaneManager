@@ -1,0 +1,96 @@
+@using KanbaneManager.Shared.Entities
+@using KanbaneManager.BlazorApp.Services
+@inject DialogService DialogService
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        <div class="grid">
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Имя"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox Style="margin-bottom: 20px; width: 100%" @bind-Value="@Item.FirstName"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Отчество"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox Style="margin-bottom: 20px; width: 100%" @bind-Value="@Item.MiddleName"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Фамилия"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox Style="margin-bottom: 20px; width: 100%" @bind-Value="@Item.LastName"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Отдел"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenDropDown AllowClear="true" TValue="int"
+                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true"
+                                    Data="@_departments" TextProperty="Name" ValueProperty="Id" Style="margin-bottom: 20px" Change="@(args => ChangeDepartments(args))"/>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+                    <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" Click="@Submit"/>
+                    <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="display: inline-block; margin-left: 10px;" Text="Cancel" Click="@Cancel"/>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div>
+            У вас не достаточно прав для просмотра этой страницы
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code
+{
+    [Parameter]
+    public IEnumerable<Department> _departments { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Item = new Employee();
+    }
+
+    public Employee Item { get; set; }
+
+    [Parameter]
+    public CrudService<Employee> crudService { get; set; }
+
+    async void Submit()
+    {
+        if (await crudService.Add(Item))
+        {
+            DialogService.Close(Item);
+        }
+    }
+
+    void Cancel()
+    {
+        DialogService.Close(false);
+    }
+
+    void ChangeDepartments(object value)
+    {
+        if (int.TryParse(value.ToString(), out var id))
+        {
+            Item.DepartmentId = id;
+        }
+        else
+        {
+            Item.DepartmentId = _departments.FirstOrDefault().Id;
+        }
+    }
+}

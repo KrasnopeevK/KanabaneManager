@@ -1,0 +1,128 @@
+@using KanbaneManager.Shared.Entities
+@using KanbaneManager.BlazorApp.Services
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        <div class="grid">
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Сотрудник"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenDropDown AllowClear="true" TValue="int"
+                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true"
+                                    Data="@_employees" Context="data" ValueProperty="Id" Style="margin-bottom: 20px" Change="@(args => ChangeEmployee(args))">
+                        <Template>
+                            @data.FirstName @data.LastName
+                        </Template>
+                    </RadzenDropDown>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Права доступа"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenDropDown AllowClear="true" TValue="int"
+                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true"
+                                    Data="@_roles" TextProperty="Name" ValueProperty="Id" Style="margin-bottom: 20px" Change="@(args => ChangeRole(args))"/>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Логин"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox Style="margin-bottom: 20px; width: 100%" @bind-Value="@Item.Login"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Пароль"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox Style="margin-bottom: 20px; width: 100%" @bind-Value="@Item.Pwd"/>
+                </div>
+            </div>
+            
+            
+            
+
+            <div class="row justify-content-center">
+                <div class="col-md-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+                    <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" Click="@Submit"/>
+                    <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="display: inline-block; margin-left: 10px;" Text="Cancel" Click="@Cancel"/>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div>
+            У вас не достаточно прав для просмотра этой страницы
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code
+{
+    [Parameter]
+    public IEnumerable<Employee> _employees { get; set; }
+    [Parameter]
+    public IEnumerable<Role> _roles { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Item = new User();
+    }
+
+    public User Item { get; set; }
+
+    [Parameter]
+    public CrudService<User> crudService { get; set; }
+
+    async void Submit()
+    {
+        if (Item.EmployeeId == -1)
+        {
+            //TODO doesn't working
+            NotificationService.Notify(NotificationSeverity.Error, "Success Summary", "Success Detail", 4000);
+            await InvokeAsync(StateHasChanged);
+        }
+        else if (await crudService.Add(Item))
+        {
+            DialogService.Close(Item);
+        }
+    }
+
+    void Cancel()
+    {
+        DialogService.Close(false);
+    }
+
+    private void ChangeEmployee(object args)
+    {
+        if (int.TryParse(args.ToString(), out var id))
+        {
+            Item.EmployeeId = id;
+        }
+        else
+        {
+            Item.EmployeeId = -1;
+        }
+    }
+
+    private void ChangeRole(object args)
+    {
+        if (int.TryParse(args.ToString(), out var id))
+        {
+            Item.RoleId = id;
+        }
+        else
+        {
+            Item.RoleId = -1;
+        }
+    }
+}

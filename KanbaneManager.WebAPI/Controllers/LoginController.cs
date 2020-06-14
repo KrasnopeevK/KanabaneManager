@@ -7,6 +7,7 @@ using KanbaneManager.Shared.Entities.AuthModels;
 using KanbaneManager.DL.Repository;
 using KanbaneManager.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
@@ -51,7 +52,8 @@ namespace KanbaneManager.WebAPI.Controllers
                 {
                     {"FirstName", employee?.FirstName},
                     {"LastName", employee?.LastName},
-                    {ClaimTypes.NameIdentifier, employee?.Id.ToString()}
+                    {ClaimTypes.NameIdentifier, employee?.Id.ToString()},
+                    {ClaimTypes.Role, identity.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).FirstOrDefault()}
                 },
                 Message = encodedJwt,
                 IsSuccess = true
@@ -62,13 +64,14 @@ namespace KanbaneManager.WebAPI.Controllers
  
         private ClaimsIdentity GetIdentity(string username, string password)
         {
-            var person = _context.Set<User>().FirstOrDefault(x => x.Login == username && x.Pwd == password);
+            var person = _context.Set<User>().Where(x => x.Login == username && x.Pwd == password).Include(x => x.Role).ToList().FirstOrDefault();
+            
             if (person != null)
             {
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, person.EmployeeId.ToString()),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, person.Id.ToString())
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, person.Role.Name)
                 };
                 var claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,

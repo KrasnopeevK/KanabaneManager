@@ -9,8 +9,9 @@ namespace KanbaneManager.Shared.Entities
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
-        public int DepartmentId { get; set; }
+        
         [ForeignKey("DepartmentId")]
+        public int DepartmentId { get; set; }
         public Department Department { get; set; }
 
         public List<Order> Orders { get; set; }

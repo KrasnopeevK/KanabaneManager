@@ -4,14 +4,16 @@ using KanbaneManager.DL.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KanbaneManager.DL.Migrations
 {
     [DbContext(typeof(KanbaneContext))]
-    partial class KanbaneContextModelSnapshot : ModelSnapshot
+    [Migration("20200614221236_fix_fk_employee")]
+    partial class fix_fk_employee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,7 +192,7 @@ namespace KanbaneManager.DL.Migrations
             modelBuilder.Entity("KanbaneManager.Shared.Entities.Employee", b =>
                 {
                     b.HasOne("KanbaneManager.Shared.Entities.Department", "Department")
-                        .WithMany("Employees")
+                        .WithMany()
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

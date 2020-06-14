@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using Blazored.LocalStorage
 @using KanbaneManager.BlazorApp.Services
+@using System.Security.Claims
 
 @inject AuthenticationService  authService
 @inject NavigationManager navigationManager
@@ -42,7 +43,7 @@
 
     bool isBusy = false;
     string message = string.Empty;
-    KanbaneManager.Shared.Entities.AuthModels.AlertMessageType messageType = KanbaneManager.Shared.Entities.AuthModels.AlertMessageType.Success;
+    AlertMessageType messageType = AlertMessageType.Success;
 
     public async Task LoginUser()
     {
@@ -55,7 +56,8 @@
                 AccessToken = result.Message, 
                 FirstName = result.UserInfo["FirstName"],
                 LastName = result.UserInfo["LastName"],
-                Id = result.UserInfo[System.Security.Claims.ClaimTypes.NameIdentifier],
+                Id = result.UserInfo[ClaimTypes.NameIdentifier],
+                Role = result.UserInfo[ClaimTypes.Role]
             };
 
             await storageService.SetItemAsync("User", userInfo);

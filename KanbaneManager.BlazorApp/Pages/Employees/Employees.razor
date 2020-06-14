@@ -1,0 +1,123 @@
+@page "/employees"
+@using KanbaneManager.Shared.Entities
+@using KanbaneManager.BlazorApp.Services
+@inject DialogService DialogService
+@attribute [Authorize]
+
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        @if (_employees == null)
+        {
+            <div class="align-middle">
+                <div class="d-flex justify-content-center">
+                    Загрузка...
+                </div>
+            </div>
+        }
+        else
+        {
+            <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="add_circle_outline" Size="ButtonSize.Medium" Text="Добавить" Style="margin: 3px;" Click="@AddButtonClick"/>
+            <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true"
+                        AllowSorting="true" Data="@_employees" TItem="Employee" ColumnWidth="100%">
+                <Columns>
+                    <RadzenGridColumn TItem="Employee" Property="FirstName" Title="Имя"/>
+                    <RadzenGridColumn TItem="Employee" Property="MiddleName" Title="Фамилия"/>
+                    <RadzenGridColumn TItem="Employee" Property="LastName" Title="Отчество"/>
+                    <RadzenGridColumn TItem="Employee" Property="Department" Context="data" Type="Department" Title="Отдел">
+                        <Template>
+                            @data.Department.Name
+                        </Template>
+                    </RadzenGridColumn>
+                    <RadzenGridColumn TItem="Employee" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                        <Template Context="SelectedItem">
+                            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="create" Size="ButtonSize.Small" Click="@((args) => EditButtonClick(args, SelectedItem))" @onclick:stopPropagation="true">
+                            </RadzenButton>
+                        </Template>
+                    </RadzenGridColumn>
+                    <RadzenGridColumn TItem="Employee" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                        <Template Context="SelectedItem">
+                            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="delete" Size="ButtonSize.Small" Click="@((args) => RemoveButtonClick(args, SelectedItem))" @onclick:stopPropagation="true">
+                            </RadzenButton>
+                        </Template>
+                    </RadzenGridColumn>
+                </Columns>
+            </RadzenGrid>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <div>
+            У вас не достаточно прав для просмотра этой страницы
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+
+
+
+@code {
+
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+
+    private IEnumerable<Employee> _employees;
+    private IEnumerable<Department> _departments;
+
+    CrudService<Employee> crudService;
+    CrudService<Department> crudServiceDepartment;
+
+    async Task DataInitAsync()
+    {
+        _employees = await crudService.GetAll();
+        foreach (var employee in _employees)
+        {
+            employee.Department = _departments.FirstOrDefault(x => x.Id == employee.DepartmentId);
+        }
+    }
+    
+    
+    protected override async Task OnInitializedAsync()
+    {
+        crudService = new CrudService<Employee>("employees", AuthenticationState.Result.User.FindFirst("AccessToken").Value);
+        crudServiceDepartment = new CrudService<Department>("departments", AuthenticationState.Result.User.FindFirst("AccessToken").Value);
+        _departments = await crudServiceDepartment.GetAll();
+        await DataInitAsync();
+    }
+
+    async void RemoveButtonClick(MouseEventArgs arg, Employee item)
+    {
+        if (await crudService.Remove(item.Id.ToString()))
+        {
+            await DataInitAsync();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    async void EditButtonClick(MouseEventArgs arg, Employee item)
+    {
+        var result = await DialogService.OpenAsync<EditEmployee>("Редактировать сотрудника", new Dictionary<string, object>
+        {
+            {"Item", item},
+            {"_departments", _departments},
+            {"crudService", crudService}
+        });
+        await DataInitAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    async void AddButtonClick()
+    {
+        var result = await DialogService.OpenAsync<AddEmployee>("Добавить сотрудника", new Dictionary<string, object>
+        {
+            {"crudService", crudService},
+            {"_departments", _departments}
+        });
+
+        if (result is Employee)
+        {
+            await DataInitAsync();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+}

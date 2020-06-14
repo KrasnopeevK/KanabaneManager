@@ -1,6 +1,10 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Молочное
-        Кружево</a>
+﻿@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">
+        Молочное
+        Кружево
+    </a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -28,8 +32,21 @@
                 <span class="oi oi-infinity" aria-hidden="true"></span>Задачи
             </NavLink>
         </li>
+        <AuthorizeView Roles="Admin">
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="employees">
+                    <span class="oi oi-people" aria-hidden="true"></span>Сотрудники
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="users">
+                    <span class="oi oi-person" aria-hidden="true"></span>Пользователи
+                </NavLink>
+            </li>
+        </AuthorizeView>
     </ul>
 </div>
+
 
 @code {
     private bool collapseNavMenu = true;
@@ -40,4 +57,5 @@
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
 }

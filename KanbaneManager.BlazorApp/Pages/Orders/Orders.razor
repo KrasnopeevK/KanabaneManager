@@ -74,6 +74,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         var token = AuthenticationState.Result.User.FindFirst("AccessToken").Value;
+        
         crudService = new CrudService<Order>("orders", token);
         _orders = await crudService.GetAll();
         crudServiceEmployee = new CrudService<Employee>("employees", token);

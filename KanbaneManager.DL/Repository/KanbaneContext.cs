@@ -26,7 +26,11 @@ namespace KanbaneManager.DL.Repository
         {
             modelBuilder.Entity<Role>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
             modelBuilder.Entity<User>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
-            modelBuilder.Entity<Employee>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
+            modelBuilder.Entity<Employee>(b =>
+            {
+                b.Property(x => x.Id).ValueGeneratedOnAdd();
+                b.HasOne(x => x.Department).WithMany(x => x.Employees).HasForeignKey(x => x.DepartmentId);
+            });
             modelBuilder.Entity<Department>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
             modelBuilder.Entity<Car>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
             modelBuilder.Entity<TradePoint>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });

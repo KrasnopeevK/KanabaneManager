@@ -6,5 +6,6 @@ namespace KanbaneManager.Shared.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public List<Employee> Employees { get; set; }
     }
 }

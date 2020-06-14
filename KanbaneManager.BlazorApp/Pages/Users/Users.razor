@@ -1,0 +1,134 @@
+@page "/users"
+@using KanbaneManager.Shared.Entities
+@using KanbaneManager.BlazorApp.Services
+@inject DialogService DialogService
+@attribute [Authorize]
+
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        @if (_users == null)
+        {
+            <div class="align-middle">
+                <div class="d-flex justify-content-center">
+                    Загрузка...
+                </div>
+            </div>
+        }
+        else
+        {
+            <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="add_circle_outline" Size="ButtonSize.Medium" Text="Добавить" Style="margin: 3px;" Click="@AddButtonClick"/>
+            <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true"
+                        AllowSorting="true" Data="@_users" TItem="User" ColumnWidth="100%">
+                <Columns>
+                    <RadzenGridColumn TItem="User" Property="Employee" Context="data" Type="Employee" Title="ФИО">
+                        <Template>
+                            @data.Employee.FirstName @data.Employee.MiddleName @data.Employee.LastName
+                        </Template>
+                    </RadzenGridColumn>
+
+                    <RadzenGridColumn TItem="User" Property="Role" Context="data" Type="Role" Title="Права доступа">
+                        <Template>
+                            @data.Role.Name
+                        </Template>
+                    </RadzenGridColumn>
+
+                    <RadzenGridColumn TItem="User" Property="Login" Title="Логин"/>
+                    <RadzenGridColumn TItem="User" Property="Pwd" Title="Пароль"/>
+
+                    <RadzenGridColumn TItem="User" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                        <Template Context="SelectedItem">
+                            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="create" Size="ButtonSize.Small" Click="@((args) => EditButtonClick(args, SelectedItem))" @onclick:stopPropagation="true">
+                            </RadzenButton>
+                        </Template>
+                    </RadzenGridColumn>
+                    <RadzenGridColumn TItem="User" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                        <Template Context="SelectedItem">
+                            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="delete" Size="ButtonSize.Small" Click="@((args) => RemoveButtonClick(args, SelectedItem))" @onclick:stopPropagation="true">
+                            </RadzenButton>
+                        </Template>
+                    </RadzenGridColumn>
+                </Columns>
+            </RadzenGrid>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <div>
+            У вас не достаточно прав для просмотра этой страницы
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+
+    private IEnumerable<User> _users;
+    private IEnumerable<Role> _roles;
+    private IEnumerable<Employee> _employees;
+
+    CrudService<User> crudService;
+    CrudService<Role> crudServiceRole;
+    CrudService<Employee> crudServiceEmployees;
+
+    async Task DataInitAsync()
+    {
+        _users = await crudService.GetAll();
+        _roles = await crudServiceRole.GetAll();
+        _employees = await crudServiceEmployees.GetAll();
+        foreach (var user in _users)
+        {
+            user.Role = _roles.FirstOrDefault(x => x.Id == user.RoleId);
+            user.Employee = _employees.FirstOrDefault(x => x.Id == user.EmployeeId);
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var token = AuthenticationState.Result.User.FindFirst("AccessToken").Value;
+        crudService = new CrudService<User>("users", token);
+        crudServiceRole = new CrudService<Role>("roles", token);
+        crudServiceEmployees = new CrudService<Employee>("employees", token);
+        
+        await DataInitAsync();
+    }
+
+    async void RemoveButtonClick(MouseEventArgs arg, User item)
+    {
+        if (await crudService.Remove(item.Id.ToString()))
+        {
+            await DataInitAsync();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    async void EditButtonClick(MouseEventArgs arg, User item)
+    {
+        var result = await DialogService.OpenAsync<EditUser>($"Редактировать пользователя {item.Employee.LastName}", new Dictionary<string, object>
+        {
+            {"Item", item},
+            {"_roles", _roles},
+            {"crudService", crudService}
+        });
+        await DataInitAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    async void AddButtonClick()
+    {
+        var result = await DialogService.OpenAsync<AddUser>("Добавить пользователя", new Dictionary<string, object>
+        {
+            {"crudService", crudService},
+            {"_roles", _roles},
+            {"_employees", _employees}
+        });
+
+        if (result is User)
+        {
+            await DataInitAsync();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+}
