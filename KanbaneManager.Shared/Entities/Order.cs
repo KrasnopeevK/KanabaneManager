@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KanbaneManager.Shared.Entities
@@ -8,15 +9,20 @@ namespace KanbaneManager.Shared.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public DateTime CreationDate { get; set; }
-        public int ExecutorId { get; set; }
         [ForeignKey("ExecutorId")]
+        public int ExecutorId { get; set; }
         public Employee Executor { get; set; }
-        public int? CarId { get; set; }
         [ForeignKey("CarId")]
+        public int? CarId { get; set; }
         public Car Car { get; set; }
-        public int? TradePointId { get; set; }
         [ForeignKey("TradePointId")]
+        public int? TradePointId { get; set; }
         public TradePoint TradePoint { get; set; }
+        
+        [DefaultValue(1)]
+        [ForeignKey("StateId")]
+        public int StateId { get; set; }
+        public State State { get; set; }
         public string OrderDescription { get; set; }
     }
 }

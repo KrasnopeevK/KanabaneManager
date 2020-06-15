@@ -106,6 +106,9 @@ namespace KanbaneManager.DL.Migrations
                     b.Property<string>("OrderDescription")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("TradePointId")
                         .HasColumnType("int");
 
@@ -114,6 +117,8 @@ namespace KanbaneManager.DL.Migrations
                     b.HasIndex("CarId");
 
                     b.HasIndex("ExecutorId");
+
+                    b.HasIndex("StateId");
 
                     b.HasIndex("TradePointId");
 
@@ -133,6 +138,21 @@ namespace KanbaneManager.DL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("KanbaneManager.Shared.Entities.State", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("States");
                 });
 
             modelBuilder.Entity("KanbaneManager.Shared.Entities.TradePoint", b =>
@@ -205,6 +225,12 @@ namespace KanbaneManager.DL.Migrations
                     b.HasOne("KanbaneManager.Shared.Entities.Employee", "Executor")
                         .WithMany("Orders")
                         .HasForeignKey("ExecutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KanbaneManager.Shared.Entities.State", "State")
+                        .WithMany("Orders")
+                        .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

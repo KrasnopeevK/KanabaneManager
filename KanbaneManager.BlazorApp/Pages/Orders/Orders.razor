@@ -22,17 +22,17 @@ else
             <RadzenGridColumn TItem="Order" Property="CreationDate" Title="Дата создания"/>
             <RadzenGridColumn TItem="Order" Property="Executor" Context="data" Type="Employee" Title="Исполнитель">
                 <Template>
-                    @data.Executor.FirstName @data.Executor.LastName
+                    @data.Executor?.FirstName @data.Executor?.LastName
                 </Template>
             </RadzenGridColumn>
             <RadzenGridColumn TItem="Order" Property="TradePoint" Context="data" Type="TradePoint" Title="Торговая тачка">
                 <Template>
-                    @data.TradePoint.City @data.TradePoint.Name
+                    @data.TradePoint?.City @data.TradePoint?.Name
                 </Template>
             </RadzenGridColumn>
             <RadzenGridColumn TItem="Order" Property="Car" Context="data" Type="Car" Title="Машина">
                 <Template>
-                    @data.Car.Label @data.Car.RegNumber
+                    @data.Car?.Label @data.Car?.RegNumber
                 </Template>
             </RadzenGridColumn>
             <RadzenGridColumn TItem="Order" Property="OrderDescription" Title="Описание"/>

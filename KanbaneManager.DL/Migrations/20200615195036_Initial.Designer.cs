@@ -10,45 +10,42 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KanbaneManager.DL.Migrations
 {
     [DbContext(typeof(KanbaneContext))]
-    [Migration("20200326184715_Init")]
-    partial class Init
+    [Migration("20200615195036_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.2")
+                .HasAnnotation("ProductVersion", "5.0.0-preview.4.20220.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("KanbaneManager.DL.Entities.Car", b =>
+            modelBuilder.Entity("KanbaneManager.Shared.Entities.Car", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AdditionalInformation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Carrying")
+                        .HasColumnType("float");
+
                     b.Property<string>("Label")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("LastToDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("NextToDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("RegNumber")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("WeightLift")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
                     b.ToTable("Cars");
                 });
 
-            modelBuilder.Entity("KanbaneManager.DL.Entities.Department", b =>
+            modelBuilder.Entity("KanbaneManager.Shared.Entities.Department", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,7 +60,7 @@ namespace KanbaneManager.DL.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("KanbaneManager.DL.Entities.Employee", b =>
+            modelBuilder.Entity("KanbaneManager.Shared.Entities.Employee", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -89,14 +86,14 @@ namespace KanbaneManager.DL.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("KanbaneManager.DL.Entities.Order", b =>
+            modelBuilder.Entity("KanbaneManager.Shared.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CarId")
+                    b.Property<int?>("CarId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreationDate")
@@ -105,11 +102,17 @@ namespace KanbaneManager.DL.Migrations
                     b.Property<int>("ExecutorId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OrderDescription")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TradePointId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -117,10 +120,14 @@ namespace KanbaneManager.DL.Migrations
 
                     b.HasIndex("ExecutorId");
 
+                    b.HasIndex("StateId");
+
+                    b.HasIndex("TradePointId");
+
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("KanbaneManager.DL.Entities.Role", b =>
+            modelBuilder.Entity("KanbaneManager.Shared.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -135,7 +142,22 @@ namespace KanbaneManager.DL.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("KanbaneManager.DL.Entities.TradePoint", b =>
+            modelBuilder.Entity("KanbaneManager.Shared.Entities.State", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("States");
+                });
+
+            modelBuilder.Entity("KanbaneManager.Shared.Entities.TradePoint", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -159,7 +181,7 @@ namespace KanbaneManager.DL.Migrations
                     b.ToTable("TradePoint");
                 });
 
-            modelBuilder.Entity("KanbaneManager.DL.Entities.User", b =>
+            modelBuilder.Entity("KanbaneManager.Shared.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -187,39 +209,47 @@ namespace KanbaneManager.DL.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("KanbaneManager.DL.Entities.Employee", b =>
+            modelBuilder.Entity("KanbaneManager.Shared.Entities.Employee", b =>
                 {
-                    b.HasOne("KanbaneManager.DL.Entities.Department", "Department")
-                        .WithMany()
+                    b.HasOne("KanbaneManager.Shared.Entities.Department", "Department")
+                        .WithMany("Employees")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("KanbaneManager.DL.Entities.Order", b =>
+            modelBuilder.Entity("KanbaneManager.Shared.Entities.Order", b =>
                 {
-                    b.HasOne("KanbaneManager.DL.Entities.Car", "Car")
-                        .WithMany()
-                        .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("KanbaneManager.Shared.Entities.Car", "Car")
+                        .WithMany("Orders")
+                        .HasForeignKey("CarId");
 
-                    b.HasOne("KanbaneManager.DL.Entities.Employee", "Executor")
-                        .WithMany()
+                    b.HasOne("KanbaneManager.Shared.Entities.Employee", "Executor")
+                        .WithMany("Orders")
                         .HasForeignKey("ExecutorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("KanbaneManager.Shared.Entities.State", "State")
+                        .WithMany("Orders")
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KanbaneManager.Shared.Entities.TradePoint", "TradePoint")
+                        .WithMany("Orders")
+                        .HasForeignKey("TradePointId");
                 });
 
-            modelBuilder.Entity("KanbaneManager.DL.Entities.User", b =>
+            modelBuilder.Entity("KanbaneManager.Shared.Entities.User", b =>
                 {
-                    b.HasOne("KanbaneManager.DL.Entities.Employee", "Employee")
+                    b.HasOne("KanbaneManager.Shared.Entities.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KanbaneManager.DL.Entities.Role", "Role")
+                    b.HasOne("KanbaneManager.Shared.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)

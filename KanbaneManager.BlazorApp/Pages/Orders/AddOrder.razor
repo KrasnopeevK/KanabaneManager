@@ -28,7 +28,11 @@ else
             <div class="col-md-8">
                 <RadzenDropDown AllowClear="true" TValue="int"
                                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true"
-                                Data="@_employees" TextProperty="LastName" ValueProperty="Id" Style="margin-bottom: 20px" Change="@(args => ChangeEmployee(args))"/>
+                                Data="@_employees" Context="data" ValueProperty="Id" Style="margin-bottom: 20px" Change="@(args => ChangeEmployee(args))">
+                    <Template>
+                        @data.FirstName @data.LastName
+                    </Template>
+                </RadzenDropDown>
             </div>
         </div>
         <div class="row">
@@ -38,7 +42,12 @@ else
             <div class="col-md-8">
                 <RadzenDropDown AllowClear="true" TValue="Nullable<int>"
                                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true"
-                                Data="@_cars" TextProperty="RegNumber" ValueProperty="Id" Style="margin-bottom: 20px" Change="@(args => ChangeCar(args))"/>
+                                Data="@_cars" Context="data" ValueProperty="Id" Style="margin-bottom: 20px" Change="@(args => ChangeCar(args))">
+
+                    <Template>
+                        @data.Label @data.RegNumber
+                    </Template>
+                </RadzenDropDown>
             </div>
         </div>
         <div class="row">
@@ -48,7 +57,11 @@ else
             <div class="col-md-8">
                 <RadzenDropDown AllowClear="true" TValue="Nullable<int>"
                                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true"
-                                Data="@_points" TextProperty="Name" ValueProperty="Id" Style="margin-bottom: 20px" Change="@(args => ChangePoint(args))"/>
+                                Data="@_points" Context="data" ValueProperty="Id" Style="margin-bottom: 20px" Change="@(args => ChangePoint(args))">
+                    <Template>
+                        @data.Name @data.City
+                    </Template>
+                </RadzenDropDown>
             </div>
         </div>
         <div class="row">
@@ -97,6 +110,7 @@ else
     {
         Item = new Order();
         Item.CreationDate = DateTime.Now;
+        Item.StateId = 1;
         _cars = await crudServiceCar.GetAll();
         _points = await crudServicePoints.GetAll();
         _employees = await crudServiceEmployee.GetAll();

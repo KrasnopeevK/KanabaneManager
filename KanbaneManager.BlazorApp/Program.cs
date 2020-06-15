@@ -28,7 +28,8 @@ namespace KanbaneManager.BlazorApp
             builder.Services.AddFileReaderService(options =>
             {
                 options.UseWasmSharedBuffer = true;
-            }); 
+            });
+           
             builder.Services.AddScoped<AuthenticationStateProvider, LocalAuthenticationStateProvider>();
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<NotificationService>();

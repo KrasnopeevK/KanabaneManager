@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace KanbaneManager.DL.Migrations
 {
-    public partial class Init : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,13 +11,12 @@ namespace KanbaneManager.DL.Migrations
                 name: "Cars",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Label = table.Column<string>(nullable: true),
-                    RegNumber = table.Column<string>(nullable: true),
-                    WeightLift = table.Column<double>(nullable: false),
-                    LastToDate = table.Column<DateTime>(nullable: false),
-                    NextToDate = table.Column<DateTime>(nullable: false)
+                    Label = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RegNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Carrying = table.Column<double>(type: "float", nullable: false),
+                    AdditionalInformation = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -28,9 +27,9 @@ namespace KanbaneManager.DL.Migrations
                 name: "Departments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -41,9 +40,9 @@ namespace KanbaneManager.DL.Migrations
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -51,15 +50,28 @@ namespace KanbaneManager.DL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "States",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_States", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TradePoint",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    City = table.Column<string>(nullable: true),
-                    Address = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -70,12 +82,12 @@ namespace KanbaneManager.DL.Migrations
                 name: "Employees",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(nullable: true),
-                    MiddleName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    DepartmentId = table.Column<int>(nullable: false)
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DepartmentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -92,13 +104,15 @@ namespace KanbaneManager.DL.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationDate = table.Column<DateTime>(nullable: false),
-                    OrderDate = table.Column<DateTime>(nullable: false),
-                    ExecutorId = table.Column<int>(nullable: false),
-                    CarId = table.Column<int>(nullable: false),
-                    OrderDescription = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExecutorId = table.Column<int>(type: "int", nullable: false),
+                    CarId = table.Column<int>(type: "int", nullable: true),
+                    TradePointId = table.Column<int>(type: "int", nullable: true),
+                    StateId = table.Column<int>(type: "int", nullable: false),
+                    OrderDescription = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -108,25 +122,37 @@ namespace KanbaneManager.DL.Migrations
                         column: x => x.CarId,
                         principalTable: "Cars",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Orders_Employees_ExecutorId",
                         column: x => x.ExecutorId,
                         principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_States_StateId",
+                        column: x => x.StateId,
+                        principalTable: "States",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_TradePoint_TradePointId",
+                        column: x => x.TradePointId,
+                        principalTable: "TradePoint",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Login = table.Column<string>(nullable: true),
-                    Pwd = table.Column<string>(nullable: true),
-                    RoleId = table.Column<int>(nullable: false),
-                    EmployeeId = table.Column<int>(nullable: false)
+                    Login = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Pwd = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -161,6 +187,16 @@ namespace KanbaneManager.DL.Migrations
                 column: "ExecutorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_StateId",
+                table: "Orders",
+                column: "StateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_TradePointId",
+                table: "Orders",
+                column: "TradePointId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_EmployeeId",
                 table: "Users",
                 column: "EmployeeId");
@@ -177,13 +213,16 @@ namespace KanbaneManager.DL.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "TradePoint");
-
-            migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Cars");
+
+            migrationBuilder.DropTable(
+                name: "States");
+
+            migrationBuilder.DropTable(
+                name: "TradePoint");
 
             migrationBuilder.DropTable(
                 name: "Employees");

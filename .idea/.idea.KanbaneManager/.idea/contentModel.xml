@@ -100,20 +100,8 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="KanbaneManager.DL.csproj" t="IncludeRecursive" />
         <e p="Migrations" t="Include">
-          <e p="20200326184715_Init.cs" t="Include" />
-          <e p="20200326184715_Init.Designer.cs" t="Include" />
-          <e p="20200605082516_Car_changes.cs" t="Include" />
-          <e p="20200605082516_Car_changes.Designer.cs" t="Include" />
-          <e p="20200614094030_order_changed.cs" t="Include" />
-          <e p="20200614094030_order_changed.Designer.cs" t="Include" />
-          <e p="20200614120652_wrapp_nullable.cs" t="Include" />
-          <e p="20200614120652_wrapp_nullable.Designer.cs" t="Include" />
-          <e p="20200614165358_orde_fluentapi.cs" t="Include" />
-          <e p="20200614165358_orde_fluentapi.Designer.cs" t="Include" />
-          <e p="20200614221236_fix_fk_employee.cs" t="Include" />
-          <e p="20200614221236_fix_fk_employee.Designer.cs" t="Include" />
-          <e p="20200614221618_fix_fk_employee_fix_2.cs" t="Include" />
-          <e p="20200614221618_fix_fk_employee_fix_2.Designer.cs" t="Include" />
+          <e p="20200615195036_Initial.cs" t="Include" />
+          <e p="20200615195036_Initial.Designer.cs" t="Include" />
           <e p="KanbaneContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
@@ -143,6 +131,7 @@
           <e p="IIdentifier.cs" t="Include" />
           <e p="Order.cs" t="Include" />
           <e p="Role.cs" t="Include" />
+          <e p="State.cs" t="Include" />
           <e p="TradePoint.cs" t="Include" />
           <e p="User.cs" t="Include" />
         </e>

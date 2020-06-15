@@ -12,12 +12,13 @@ namespace KanbaneManager.DL.Repository
         public DbSet<Car> Cars { get; set; }
         public DbSet<TradePoint> TradePoint { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<State> States { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var connection =
-                @"Data Source=DESKTOP-AGJ0SL6\SQLEXPRESS;Database=KanabaneManager;Encrypt=False;Integrated Security=True;User ID=DESKTOP-AGJ0SL6\kiril";
+                @"Data Source=DESKTOP-AGJ0SL6\SQLEXPRESS;Database=KanbaneManager;Encrypt=False;Integrated Security=True;User ID=DESKTOP-AGJ0SL6\kiril";
             optionsBuilder.UseSqlServer(connection);
             base.OnConfiguring(optionsBuilder);
         }
@@ -40,8 +41,11 @@ namespace KanbaneManager.DL.Repository
                 b.HasOne(x => x.Car).WithMany(x => x.Orders).HasForeignKey(x => x.CarId);
                 b.HasOne(x => x.Executor).WithMany(x => x.Orders).HasForeignKey(x => x.ExecutorId);
                 b.HasOne(x => x.TradePoint).WithMany(x => x.Orders).HasForeignKey(x => x.TradePointId);
-                
+                b.HasOne(x => x.State).WithMany(x => x.Orders).HasForeignKey(x => x.StateId);
+
             });
+            modelBuilder.Entity<State>(b => { b.Property(x => x.Id).ValueGeneratedOnAdd(); });
+
 
             base.OnModelCreating(modelBuilder);
         }
