@@ -1,0 +1,142 @@
+@using KanbaneManager.Shared.Entities
+@using KanbaneManager.BlazorApp.Services
+@inject DialogService DialogService
+
+<div class="grid">
+    <div class="row">
+        <div class="col-md-4 align-items-center d-flex">
+            <RadzenLabel Text="Название"/>
+        </div>
+        <div class="col-md-8">
+            <RadzenTextBox Style="margin-bottom: 20px; width: 100%" @bind-Value="@Item.Name" Disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 align-items-center d-flex">
+            <RadzenLabel Text="Исполнитель"/>
+        </div>
+        <div class="col-md-8">
+            <RadzenTextBox Style="margin-bottom: 20px; width: 100%" Disabled="true" Value="@Item.Executor.FirstName"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 align-items-center d-flex">
+            <RadzenLabel Text="Авто"/>
+        </div>
+        <div class="col-md-8">
+            <RadzenTextBox Style="margin-bottom: 20px; width: 100%" Disabled="true" Value="@ItemCar"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 align-items-center d-flex">
+            <RadzenLabel Text="Торговая точка"/>
+        </div>
+        <div class="col-md-8">
+            <RadzenTextBox Style="margin-bottom: 20px; width: 100%" Disabled="true" Value="@ItemPoint"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 align-items-center d-flex">
+            <RadzenLabel Text="Описание"/>
+        </div>
+        <div class="col-md-8">
+            <RadzenTextBox Style="margin-bottom: 20px; width: 100%" @bind-Value="@Item.OrderDescription"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <RadzenDropDown AllowClear="true"
+                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true"
+                            Data="@_states" Style="margin-bottom: 20px" @bind-Value="@ItemsState"/>
+        </div>
+    </div>
+
+
+    <div class="row justify-content-center">
+        <div class="col-md-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" Click="@Submit"/>
+            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="display: inline-block; margin-left: 10px;" Text="Cancel" Click="@Cancel"/>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        if (Item.TradePointId.HasValue)
+        {
+            var crudServiceT = new CrudService<TradePoint>($"/tradepoints/",token);
+            Item.TradePoint = await crudServiceT.GetById(Item.TradePointId.ToString());
+            ItemPoint = $"{Item.TradePoint.Name} {Item.TradePoint.City}";
+        }
+        if (Item.CarId.HasValue)
+        {
+            var crudServiceC = new CrudService<KanbaneManager.Shared.Entities.Car>($"/cars/",token);
+            Item.Car = await crudServiceC.GetById(Item.CarId.ToString());
+            ItemCar = $"{Item.Car.Label} {Item.Car.RegNumber}";
+        }
+       
+        
+        _itemState = _states.ToArray()[Item.StateId - 1];
+        ItemEmployee = $"{Item.Executor.FirstName} {Item.Executor.LastName}";
+    }
+
+    private List<string> _states = new List<string>
+    {
+        "В очереди",
+        "В работе",
+        "Заблокировано",
+        "Выполнено"
+    };
+
+    [Parameter]
+    public Order Item { get; set; }
+
+    [Parameter]
+    public CrudService<Order> crudService { get; set; }
+
+    [Parameter]
+    public IEnumerable<Employee> _employees { get; set; }
+
+    [Parameter]
+    public IEnumerable<Order> _orders { get; set; }
+    [Parameter]
+    public string token { get; set; }
+
+
+    public string ItemEmployee { get; set; }
+    public string ItemPoint { get; set; }
+    public string ItemCar { get; set; }
+    private bool IsHasChanged;
+    private string _itemState;
+    public string ItemsState
+    {
+        get => _itemState;
+        set
+        {
+            _itemState = value;
+            Item.StateId = _states.FindIndex(x => x == value) + 1;
+            IsHasChanged = true;
+        }
+    }
+
+
+    async void Submit()
+    {
+        if (IsHasChanged)
+        {
+            await crudService.Update(Item);
+            DialogService.Close(true);
+        }
+        else
+        {
+            DialogService.Close(false);
+        }
+    }
+
+    private void Cancel()
+    {
+        DialogService.Close(false);
+    }
+}

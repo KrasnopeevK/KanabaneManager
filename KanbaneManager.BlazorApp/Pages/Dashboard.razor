@@ -1,0 +1,214 @@
+@page "/dashboard"
+@using KanbaneManager.Shared.Entities
+@using KanbaneManager.BlazorApp.Services
+@using KanbaneManager.BlazorApp.Pages.Orders
+@inject DialogService DialogService
+@attribute [Authorize]
+
+<div>
+    <div class="row" style="margin: 10px 0; border: black">
+        Фильтрация и прочая хурма
+    </div>
+    @if (_inProgress == null)
+    {
+        <div>
+            Загрузка...
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col column-index">
+                <ul class="list-group">
+                    <li class="list-group-item active" style="margin-bottom: 5px">
+                        <h2 class="text-center">В очереди</h2>
+                    </li>
+                    <RadzenDataList WrapItems="true" AllowPaging="true" Data="@_inQueue" TItem="Order">
+                        <Template Context="order">
+                            <button class="button-transp" @onclick="() => ClickItem(order)">
+                                <RadzenCard Style="width:100%;">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h3 class="text-center">
+                                                <strong>@order.Name</strong>
+                                            </h3>
+                                        </div>
+                                        <div class="col-6">@(order.CreationDate)</div>
+                                    </div>
+                                    <div class="row" style="margin-left: 2px;">
+                                        <div style="margin-top:20px;">
+                                            <b>Исполнитель:</b> @(order.Executor?.FirstName + " " + order.Executor?.LastName)
+                                        </div>
+                                    </div>
+                                </RadzenCard>
+                            </button>
+                        </Template>
+                    </RadzenDataList>
+                </ul>
+            </div>
+            <div class="col column-index">
+                <ul class="list-group">
+                    <li class="list-group-item active" style="margin-bottom: 5px; background: khaki;">
+                        <h2 class="text-center">В работе</h2>
+                    </li>
+                    <RadzenDataList WrapItems="true" AllowPaging="true" Data="@_inProgress" TItem="Order">
+                        <Template Context="order">
+                            <button class="button-transp" @onclick="() => ClickItem(order)">
+                                <RadzenCard Style="width:100%;">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h3 class="text-center">
+                                                <strong>@order.Name</strong>
+                                            </h3>
+                                        </div>
+                                        <div class="col-6">@(order.CreationDate)</div>
+                                    </div>
+                                    <div class="row" style="margin-left: 2px;">
+                                        <div style="margin-top:20px;">
+                                            <b>Исполнитель:</b> @(order.Executor?.FirstName + " " + order.Executor?.LastName)
+                                        </div>
+                                    </div>
+                                </RadzenCard>
+                            </button>
+                        </Template>
+                    </RadzenDataList>
+                </ul>
+            </div>
+            <div class="col column-index">
+                <ul class="list-group">
+                    <li class="list-group-item active" style="margin-bottom: 5px; background: lightgreen;">
+                        <h2 class="text-center">Выполнены</h2>
+                    </li>
+                    <RadzenDataList WrapItems="true" AllowPaging="true" Data="@_complete" TItem="Order">
+                        <Template Context="order">
+                            <button class="button-transp" @onclick="() => ClickItem(order)">
+                                <RadzenCard Style="width:100%;">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h3 class="text-center">
+                                                <strong>@order.Name</strong>
+                                            </h3>
+                                        </div>
+                                        <div class="col-6">@(order.CreationDate)</div>
+                                    </div>
+                                    <div class="row" style="margin-left: 2px;">
+                                        <div style="margin-top:20px;">
+                                            <b>Исполнитель:</b> @(order.Executor?.FirstName + " " + order.Executor?.LastName)
+                                        </div>
+                                    </div>
+                                </RadzenCard>
+                            </button>
+                        </Template>
+                    </RadzenDataList>
+                </ul>
+            </div>
+            <div class="col column-index">
+                <ul class="list-group">
+                    <li class="list-group-item active" style="margin-bottom: 5px; background: lightcoral;">
+                        <h2 class="text-center">Заблокированы</h2>
+                    </li>
+                    <RadzenDataList WrapItems="true" AllowPaging="true" Data="@_blocked" TItem="Order">
+                        <Template Context="order">
+                            <button class="button-transp" @onclick="() => ClickItem(order)">
+                                <RadzenCard Style="width:100%;">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h3 class="text-center">
+                                                <strong>@order.Name</strong>
+                                            </h3>
+                                        </div>
+                                        <div class="col-6">@(order.CreationDate)</div>
+                                    </div>
+                                    <div class="row" style="margin-left: 2px;">
+                                        <div style="margin-top:20px;">
+                                            <b>Исполнитель:</b> @(order.Executor?.FirstName + " " + order.Executor?.LastName)
+                                        </div>
+                                    </div>
+                                </RadzenCard>
+                            </button>
+                        </Template>
+                    </RadzenDataList>
+                </ul>
+            </div>
+        </div>
+    }
+
+</div>
+
+
+@code
+{
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+
+    private string token;
+
+    private IEnumerable<Order> _orders;
+    private IEnumerable<Employee> _employees;
+
+
+    CrudService<Order> crudService;
+    CrudService<Employee> crudServiceEmployee;
+
+    public List<Order> _inQueue { get; set; }
+    public List<Order> _inProgress { get; set; }
+    public List<Order> _blocked { get; set; }
+    public List<Order> _complete { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        token = AuthenticationState.Result.User.FindFirst("AccessToken").Value;
+
+        crudService = new CrudService<Order>("orders", token);
+        crudServiceEmployee = new CrudService<Employee>("employees", token);
+        await SetCollection();
+    }
+
+    private async Task SetCollection()
+    {
+        _orders = await crudService.GetAll();
+        _employees = await crudServiceEmployee.GetAll();
+
+        _inQueue = new List<Order>();
+        _inProgress = new List<Order>();
+        _blocked = new List<Order>();
+        _complete = new List<Order>();
+
+        foreach (var order in _orders)
+        {
+            order.Executor = _employees.FirstOrDefault(x => x.Id == order.ExecutorId);
+            switch (order.StateId)
+            {
+                case 1:
+                    _inQueue.Add(order);
+                    break;
+                case 2:
+                    _inProgress.Add(order);
+                    break;
+                case 3:
+                    _blocked.Add(order);
+                    break;
+                case 4:
+                    _complete.Add(order);
+                    break;
+            }
+        }
+    }
+
+    private async Task ClickItem(Order args)
+    {
+        var result = await DialogService.OpenAsync<OrderDetails>(args.Name, new Dictionary<string, object>
+        {
+            {"Item", args},
+            {"crudService", crudService},
+            {"_employees", _employees},
+            {"_orders", _orders},
+            {"token", token}
+        });
+        if (result is bool r && r)
+        {
+            await SetCollection();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+}

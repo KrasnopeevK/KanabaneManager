@@ -28,12 +28,14 @@
             <e p="Cars.razor" t="Include" />
             <e p="EditCar.razor" t="Include" />
           </e>
+          <e p="Dashboard.razor" t="Include" />
           <e p="Employees" t="Include">
             <e p="AddEmployee.razor" t="Include" />
             <e p="EditEmployee.razor" t="Include" />
             <e p="Employees.razor" t="Include" />
           </e>
           <e p="Index.razor" t="Include" />
+          <e p="OrderDetails.razor" t="Include" />
           <e p="Orders" t="Include">
             <e p="AddOrder.razor" t="Include" />
             <e p="EditOrder.razor" t="Include" />
