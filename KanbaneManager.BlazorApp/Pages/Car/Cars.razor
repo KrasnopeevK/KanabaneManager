@@ -2,6 +2,7 @@
 @using KanbaneManager.Shared.Entities
 @using KanbaneManager.BlazorApp.Services
 @inject DialogService DialogService
+@inject NavigationManager NavigationManager
 @attribute [Authorize]
 
 @if (_cars == null)
@@ -59,7 +60,9 @@ else
 
     async void RemoveButtonClick(MouseEventArgs arg, Car item)
     {
-        if (await crudService.Remove(item.Id.ToString()))
+        var confirm = await DialogService.OpenAsync<Confirm>($"Удалить {item.Label} {item.RegNumber}?");
+        
+        if (confirm is bool && confirm && await crudService.Remove(item.Id.ToString()))
         {
             _cars = await crudService.GetAll();
             await InvokeAsync(StateHasChanged);

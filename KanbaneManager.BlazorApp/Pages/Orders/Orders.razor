@@ -93,7 +93,8 @@ else
 
     async void RemoveButtonClick(MouseEventArgs arg, Order item)
     {
-        if (await crudService.Remove(item.Id.ToString()))
+        var confirm = await DialogService.OpenAsync<Confirm>($"Удалить {item.Name}?");
+        if (confirm is bool && confirm && await crudService.Remove(item.Id.ToString()))
         {
             _orders = await crudService.GetAll();
             SetEntities();

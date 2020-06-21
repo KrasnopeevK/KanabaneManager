@@ -30,7 +30,12 @@ namespace KanbaneManager.WebAPI.Controllers
             var identity = GetIdentity(token.Login, token.Password);
             if (identity == null)
             {
-                return BadRequest(new { errorText = "Invalid username or password." });
+                var badRequest = new UserManagerResponse
+                {
+                    Message = "Неверный логин или пароль",
+                    IsSuccess = false
+                };
+                return Json(badRequest);
             }
  
             var now = DateTime.UtcNow;

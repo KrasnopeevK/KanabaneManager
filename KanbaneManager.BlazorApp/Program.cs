@@ -18,10 +18,7 @@ namespace KanbaneManager.BlazorApp
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-            builder.Services.AddScoped<AuthenticationService>(s =>
-            {
-                return new AuthenticationService(URL);
-            });
+            builder.Services.AddScoped<AuthenticationService>(s => new AuthenticationService(URL));
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();

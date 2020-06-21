@@ -10,8 +10,8 @@ namespace KanbaneManager.BlazorApp.Services
 {
     public class CrudService<T> where T : class, IIdentifier
     {
-        private HttpClient _client;
-        private string _query;
+        private readonly HttpClient _client;
+        private readonly string _query;
 
         public CrudService(string query, string token)
         {

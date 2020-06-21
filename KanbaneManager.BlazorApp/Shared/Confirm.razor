@@ -1,0 +1,20 @@
+@inject DialogService DialogService
+<div class="row justify-content-center">
+    <div class="d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+        <RadzenButton ButtonType="ButtonType.Submit" Icon="delete" Text="Удалить" Click="@Submit"/>
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="display: inline-block; margin-left: 10px;" Text="Отмена" Click="@Cancel"/>
+    </div>
+</div>
+
+@code {
+    private void Submit()
+    {
+        DialogService.Close(true);
+    }
+
+    private void Cancel()
+    {
+        DialogService.Close(false);
+    }
+
+}

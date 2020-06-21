@@ -2,15 +2,13 @@
 
 @layout AuthLayout
 @using KanbaneManager.Shared.Entities.AuthModels
-@using Microsoft.AspNetCore.Components.Authorization
-@using Blazored.LocalStorage
 @using KanbaneManager.BlazorApp.Services
 @using System.Security.Claims
-
 @inject AuthenticationService  authService
 @inject NavigationManager navigationManager
 @inject ILocalStorageService storageService
 @inject AuthenticationStateProvider  authenticationStateProvider
+@inject NotificationService NotificationService
 
 <div class="row">
     <div class="col-12">
@@ -67,8 +65,8 @@
         }
         else
         {
-            message = result.Message;
-            messageType = KanbaneManager.Shared.Entities.AuthModels.AlertMessageType.Error;
+            var nm = new NotificationMessage() {Severity = NotificationSeverity.Error, Detail = result.Message};
+            NotificationService.Notify(nm);
         }
         isBusy = false;
     }

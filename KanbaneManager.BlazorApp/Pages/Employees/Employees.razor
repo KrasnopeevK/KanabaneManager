@@ -86,7 +86,8 @@
 
     async void RemoveButtonClick(MouseEventArgs arg, Employee item)
     {
-        if (await crudService.Remove(item.Id.ToString()))
+        var confirm = await DialogService.OpenAsync<Confirm>($"Удалить {item.FirstName} {item.LastName}?");
+        if (confirm is bool && confirm && await crudService.Remove(item.Id.ToString()))
         {
             await DataInitAsync();
             await InvokeAsync(StateHasChanged);

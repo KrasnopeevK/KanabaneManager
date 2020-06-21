@@ -60,7 +60,8 @@ else
 
     async void RemoveButtonClick(MouseEventArgs arg, TradePoint item)
     {
-        if (await crudService.Remove(item.Id.ToString()))
+        var confirm = await DialogService.OpenAsync<Confirm>($"Удалить {item.Name} {item.City}?");
+        if (confirm is bool && confirm && await crudService.Remove(item.Id.ToString()))
         {
             _points = await crudService.GetAll();
             await InvokeAsync(StateHasChanged);

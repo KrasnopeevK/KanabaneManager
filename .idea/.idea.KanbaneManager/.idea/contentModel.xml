@@ -64,6 +64,7 @@
         <e p="Shared" t="Include">
           <e p="AlertMessage.razor" t="Include" />
           <e p="AuthLayout.razor" t="Include" />
+          <e p="Confirm.razor" t="Include" />
           <e p="MainLayout.razor" t="Include" />
           <e p="NavMenu.razor" t="Include" />
           <e p="SurveyPrompt.razor" t="Include" />
